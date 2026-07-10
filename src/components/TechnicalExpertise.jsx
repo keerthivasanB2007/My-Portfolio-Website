@@ -239,11 +239,12 @@ export default function TechnicalExpertise() {
       color: '#FACC15', // yellow
       shadowColor: 'rgba(250, 204, 21, 0.25)',
       skills: [
-        { name: 'Spring Boot', icon: SiSpringboot, badge: 'Learning' },
-        { name: 'System Design', icon: Blocks, badge: 'Learning' },
-        { name: 'DevOps', icon: SiDocker, badge: 'Learning' },
+        { name: 'Advanced Java', icon: Code2, subtitle: 'Building scalable Java applications' },
+        { name: 'Operating Systems', icon: MonitorCogIcon, subtitle: 'Understanding processes, memory and scheduling' },
+        { name: 'Networks and Data Communication', icon: Network, subtitle: 'Learning computer networking fundamentals' },
+        { name: 'Theory of Computation', icon: Brain, subtitle: 'Exploring automata, grammars and computability' },
       ],
-      layout: 'tiles',
+      layout: 'learning-grid',
       colSpan: true,
     },
   ]
@@ -358,6 +359,41 @@ export default function TechnicalExpertise() {
                         badge={skill.badge}
                       />
                     ))}
+                  </div>
+                ) : category.layout === 'learning-grid' ? (
+                  // 2x2 Grid for Currently Learning roadmap
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6 mt-4">
+                    {category.skills.map((skill, index) => {
+                      const SkillIcon = skill.icon
+                      return (
+                        <motion.div
+                          key={index}
+                          whileHover={{ 
+                            y: -4, 
+                            scale: 1.01,
+                            boxShadow: `0 10px 25px rgba(59, 130, 246, 0.08)`, 
+                          }}
+                          className="p-5 flex items-start gap-4 rounded-[16px] border border-slate-200/50 bg-white/70 shadow-sm transition-all duration-300 dark:border-white/10 dark:bg-white/[0.02] dark:hover:border-[#38bdf8]/45 dark:hover:shadow-glow/10 group/item cursor-default select-none"
+                        >
+                          {/* Icon Container */}
+                          <div 
+                            className="p-3 rounded-xl bg-blue-500/5 border border-blue-500/10 flex items-center justify-center text-[#38bdf8] dark:bg-white/[0.02] dark:border-white/10 dark:text-primary transition-all duration-300 group-hover/item:scale-110"
+                          >
+                            <SkillIcon size={20} />
+                          </div>
+                          
+                          {/* Title & Subtitle */}
+                          <div className="flex flex-col gap-0.5">
+                            <span className="font-display font-bold text-base text-[#111827] dark:text-slate-100 transition-colors duration-300 group-hover/item:text-primary">
+                              {skill.name}
+                            </span>
+                            <span className="font-body text-xs text-[#64748b] dark:text-slate-400 leading-relaxed font-medium">
+                              {skill.subtitle}
+                            </span>
+                          </div>
+                        </motion.div>
+                      )
+                    })}
                   </div>
                 ) : (
                   // Premium rounded chips for Core Computer Science Concepts
