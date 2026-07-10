@@ -187,7 +187,7 @@ const GitHubImageCard = memo(function GitHubImageCard({
       whileInView="visible"
       viewport={{ once: true }}
       custom={index}
-      className="glass rounded-2xl p-5 sm:p-6 overflow-hidden"
+      className="glass rounded-2xl p-5 sm:p-6 overflow-hidden border border-slate-200/80 dark:border-white/10 shadow-sm dark:shadow-none hover:shadow-md transition-shadow duration-300"
     >
       {title && <p className="eyebrow mb-4">{title}</p>}
       <div
@@ -232,12 +232,12 @@ const GitHubImageCard = memo(function GitHubImageCard({
 
 function StatBadge({ icon: Icon, label, value }) {
   return (
-    <div className="glass-strong rounded-2xl px-4 py-3 text-center min-w-0">
+    <div className="glass-strong rounded-2xl px-4 py-3 text-center min-w-0 border border-slate-200 dark:border-white/5">
       <Icon className="mx-auto text-primary mb-1.5" size={18} aria-hidden="true" />
-      <p className="font-display font-bold text-xl sm:text-2xl text-slate-50 truncate">
+      <p className="font-display font-bold text-xl sm:text-2xl text-slate-800 dark:text-slate-50 truncate">
         {value}
       </p>
-      <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5 leading-tight">{label}</p>
+      <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">{label}</p>
     </div>
   )
 }
@@ -274,7 +274,7 @@ function ProfileCard({ profile }) {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className="glass rounded-3xl p-8 sm:p-10 relative overflow-hidden"
+      className="glass rounded-3xl p-8 sm:p-10 relative overflow-hidden border border-slate-200 dark:border-white/10"
     >
       <div className="absolute -right-24 -top-24 w-48 h-48 rounded-full bg-primary/10 blur-[80px] pointer-events-none" />
 
@@ -295,15 +295,15 @@ function ProfileCard({ profile }) {
         </div>
 
         <div className="flex-1 text-center sm:text-left min-w-0">
-          <h3 className="font-display font-bold text-2xl sm:text-3xl text-slate-50">
+          <h3 className="font-display font-bold text-2xl sm:text-3xl text-slate-800 dark:text-slate-50">
             {displayName}
           </h3>
           <p className="text-primary font-medium mt-1">@{profile.login}</p>
 
           {profile.bio ? (
-            <p className="text-slate-400 mt-3 max-w-xl leading-relaxed">{profile.bio}</p>
+            <p className="text-slate-600 dark:text-slate-400 mt-3 max-w-xl leading-relaxed">{profile.bio}</p>
           ) : (
-            <p className="text-slate-500 mt-3 italic">No bio available.</p>
+            <p className="text-slate-550 mt-3 italic">No bio available.</p>
           )}
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
@@ -323,7 +323,7 @@ function ProfileCard({ profile }) {
             rel="noopener noreferrer"
             whileHover={{ scale: 1.03, boxShadow: '0 0 30px rgba(56, 189, 248, 0.35)' }}
             whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center gap-2 mt-7 px-6 py-3 rounded-xl font-semibold text-sm bg-gradient-to-r from-primary/20 to-accent/20 border border-primary/30 text-slate-100 hover:border-primary/60 transition-colors"
+            className="inline-flex items-center gap-2 mt-7 px-6 py-3 rounded-xl font-semibold text-sm bg-gradient-to-r from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20 border border-primary/30 text-slate-700 dark:text-slate-100 hover:border-primary/60 transition-colors"
           >
             <Github size={18} aria-hidden="true" />
             View GitHub Profile
@@ -349,34 +349,33 @@ function RepoCard({ repo, index }) {
       transition={{ duration: 0.3 }}
       className="github-gradient-border rounded-2xl h-full group"
     >
-      <div className="glass rounded-2xl p-6 h-full flex flex-col transition-shadow duration-300 group-hover:shadow-glow">
+      <div className="glass rounded-2xl p-6 h-full flex flex-col transition-shadow duration-300 border border-slate-200/60 dark:border-white/5 group-hover:shadow-glow">
         <div className="flex items-start justify-between gap-3">
-          <h4 className="font-display font-semibold text-lg text-slate-100 group-hover:text-primary transition-colors truncate">
+          <h4 className="font-display font-semibold text-lg text-slate-800 dark:text-slate-100 group-hover:text-primary transition-colors truncate">
             {repo.name}
           </h4>
           <span
-            className={`shrink-0 inline-flex items-center gap-1 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border ${
-              visibility === 'public'
+            className={`shrink-0 inline-flex items-center gap-1 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border ${visibility === 'public'
                 ? 'border-secondary/30 bg-secondary/10 text-secondary'
                 : 'border-accent/30 bg-accent/10 text-accent'
-            }`}
+              }`}
           >
             <Eye size={10} aria-hidden="true" />
             {visibility}
           </span>
         </div>
 
-        <p className="text-sm text-slate-400 mt-3 flex-1 leading-relaxed line-clamp-3">
+        <p className="text-sm text-slate-600 dark:text-slate-400 mt-3 flex-1 leading-relaxed line-clamp-3">
           {repo.description || 'No description available.'}
         </p>
 
         <div className="flex flex-wrap items-center gap-3 mt-4">
           <LanguageBadge language={repo.language} />
-          <span className="inline-flex items-center gap-1 text-xs text-slate-400">
+          <span className="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
             <Star size={13} aria-hidden="true" />
             {repo.stargazers_count}
           </span>
-          <span className="inline-flex items-center gap-1 text-xs text-slate-400">
+          <span className="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
             <GitFork size={13} aria-hidden="true" />
             {repo.forks_count}
           </span>
@@ -390,7 +389,7 @@ function RepoCard({ repo, index }) {
           rel="noopener noreferrer"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="mt-5 inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold border border-white/10 bg-white/[0.03] hover:border-primary/40 hover:bg-primary/10 text-slate-200 transition-colors"
+          className="mt-5 inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] hover:border-primary/45 hover:bg-primary/5 dark:hover:bg-primary/10 text-slate-700 dark:text-slate-200 transition-colors"
         >
           Open Repository
           <ExternalLink size={14} aria-hidden="true" />
@@ -429,6 +428,12 @@ export default function GithubStats() {
         .github-gradient-border {
           background: linear-gradient(135deg, rgba(56, 189, 248, 0.35), rgba(168, 85, 247, 0.35));
           padding: 1px;
+        }
+        [data-theme='light'] .github-gradient-border {
+          background: linear-gradient(135deg, rgba(37, 99, 235, 0.22), rgba(124, 58, 237, 0.22));
+        }
+        [data-theme='light'] .group-hover\:shadow-glow:hover {
+          box-shadow: 0 15px 30px -5px rgba(15, 23, 42, 0.08), 0 8px 12px -6px rgba(15, 23, 42, 0.04);
         }
         .github-embed-img {
           display: block;
@@ -525,7 +530,7 @@ export default function GithubStats() {
             whileInView="visible"
             viewport={{ once: true }}
             custom={5}
-            className="font-display font-bold text-xl sm:text-2xl text-slate-50 mb-6"
+            className="font-display font-bold text-xl sm:text-2xl text-slate-800 dark:text-slate-50 mb-6"
           >
             Featured Projects
           </motion.h3>

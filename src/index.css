@@ -26,11 +26,11 @@
   --bg-page: #F8FAFC;
   --bg-secondary: #F1F5F9;
   --bg-section: #FFFFFF;
-  --bg-navbar: rgba(255,255,255,0.75);
-  --bg-card: rgba(255,255,255,0.72);
-  --bg-card-strong: rgba(255,255,255,0.72);
-  --glass-border: rgba(148,163,184,0.25);
-  --glass-border-strong: rgba(148,163,184,0.20);
+  --bg-navbar: rgba(255, 255, 255, 0.75);
+  --bg-card: rgba(255, 255, 255, 0.72);
+  --bg-card-strong: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(148, 163, 184, 0.25);
+  --glass-border-strong: rgba(148, 163, 184, 0.20);
   --text-main: #0F172A;
   --text-secondary: #334155;
   --text-muted: #64748B;
@@ -44,7 +44,8 @@
   scroll-behavior: auto;
 }
 
-html, body {
+html,
+body {
   background: var(--bg-page);
   overscroll-behavior: none;
   transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
@@ -57,12 +58,23 @@ body {
   transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
 }
 
-@media (max-width: 768px), (pointer: coarse) {
-  body { cursor: auto; }
-  .cursor-dot, .cursor-ring { display: none !important; }
+@media (max-width: 768px),
+(pointer: coarse) {
+  body {
+    cursor: auto;
+  }
+
+  .cursor-dot,
+  .cursor-ring {
+    display: none !important;
+  }
 }
 
-h1, h2, h3, h4, .font-display {
+h1,
+h2,
+h3,
+h4,
+.font-display {
   font-family: 'Space Grotesk', sans-serif;
 }
 
@@ -71,8 +83,14 @@ h1, h2, h3, h4, .font-display {
 }
 
 /* Custom scrollbar */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: var(--bg-page); }
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-page);
+}
+
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #38BDF8, #A855F7);
   border-radius: 8px;
@@ -122,8 +140,10 @@ h1, h2, h3, h4, .font-display {
 /* Cursor */
 .cursor-dot {
   position: fixed;
-  top: 0; left: 0;
-  width: 8px; height: 8px;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
   background: #FFFFFF;
   border-radius: 50%;
   pointer-events: none;
@@ -131,10 +151,13 @@ h1, h2, h3, h4, .font-display {
   transform: translate(-50%, -50%);
   mix-blend-mode: difference;
 }
+
 .cursor-ring {
   position: fixed;
-  top: 0; left: 0;
-  width: 36px; height: 36px;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
   border: 1px solid rgba(56, 189, 248, 0.55);
   border-radius: 50%;
   pointer-events: none;
@@ -157,7 +180,8 @@ h1, h2, h3, h4, .font-display {
 }
 
 /* Focus visibility for accessibility */
-a:focus-visible, button:focus-visible {
+a:focus-visible,
+button:focus-visible {
   outline: 2px solid #FACC15;
   outline-offset: 3px;
 }
@@ -328,7 +352,10 @@ a:focus-visible, button:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
