@@ -156,55 +156,63 @@ function TechLogo({ tech }) {
   )
 }
 
-const ProjectBanner = memo(function ProjectBanner({ repoName, title, stack, category }) {
-  const [imgSrc, setImgSrc] = useState(
-    `https://raw.githubusercontent.com/keerthivasanB2007/${repoName}/main/screenshot.png`
-  )
-  const [hasError, setHasError] = useState(false)
-
-  const handleImageError = () => {
-    setHasError(true)
-  }
-
-  if (hasError) {
-    return (
-      <div className="w-full h-full bg-gradient-to-br from-void-950 via-void-900 to-primary/20 flex flex-col items-center justify-center p-6 text-center select-none relative overflow-hidden group-hover:scale-105 transition-transform duration-500 min-h-[220px]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.15),transparent_60%)] pointer-events-none" />
-        <div className="absolute inset-0 bg-grain opacity-20 pointer-events-none" />
-
-        <div className="flex gap-3 mb-4 z-10">
-          {stack.slice(0, 3).map((tech) => (
-            <div
-              key={tech}
-              className="w-10 h-10 rounded-xl glass flex items-center justify-center border border-white/10 shadow-lg text-slate-300"
-              style={{
-                boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
-                backdropFilter: 'blur(4px)'
-              }}
-            >
-              <TechLogo tech={tech} />
-            </div>
-          ))}
-        </div>
-
-        <span className="text-[10px] uppercase tracking-widest text-primary/80 mb-1.5 font-bold z-10">
-          {category}
-        </span>
-        <h4 className="font-display font-bold text-xl text-slate-100 max-w-xs z-10 leading-snug">
-          {title}
-        </h4>
-      </div>
-    )
-  }
+const ProjectBanner = memo(function ProjectBanner({ repoName, title, stack, category, theme }) {
+  const isLight = theme === 'light'
 
   return (
-    <img
-      src={imgSrc}
-      alt={`${title} screenshot`}
-      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 min-h-[220px]"
-      loading="lazy"
-      onError={handleImageError}
-    />
+    <div 
+      className={`w-full h-full flex flex-col items-center justify-center p-8 text-center select-none relative overflow-hidden min-h-[260px] lg:min-h-full transition-all duration-500 ${
+        isLight 
+          ? 'bg-white' 
+          : 'bg-[#070b15]/40'
+      }`}
+    >
+      {/* Radial Blue Glow */}
+      <div 
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{
+          background: isLight 
+            ? 'radial-gradient(circle at center, rgba(59,130,246,0.12), transparent 70%)'
+            : 'radial-gradient(circle at center, rgba(56,189,248,0.15), transparent 60%)'
+        }}
+      />
+
+      {/* Floating Logo / Tech Icons */}
+      <div className="flex gap-3.5 mb-6 z-10">
+        {stack.slice(0, 3).map((tech) => (
+          <motion.div
+            key={tech}
+            whileHover={{ y: -4, scale: 1.05 }}
+            className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-sm transition-all duration-300 ${
+              isLight 
+                ? 'bg-white border-slate-100 text-[#334155] shadow-slate-200/40' 
+                : 'bg-white/[0.03] border-white/10 text-slate-300 shadow-black/20'
+            }`}
+            style={{
+              backdropFilter: 'blur(8px)'
+            }}
+          >
+            <div className="flex items-center justify-center pl-1">
+              <TechLogo tech={tech} />
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Project Title Centered */}
+      <h4 className={`font-display font-bold text-xl max-w-xs z-10 leading-snug mb-3 tracking-tight ${
+        isLight ? 'text-[#334155]' : 'text-slate-100'
+      }`}>
+        {title}
+      </h4>
+
+      {/* Project Category Label Below */}
+      <span className={`text-[10px] uppercase tracking-widest font-extrabold z-10 ${
+        isLight ? 'text-slate-400' : 'text-primary/80'
+      }`}>
+        {category}
+      </span>
+    </div>
   )
 })
 
@@ -244,9 +252,9 @@ export default function Projects() {
                   stars: repo.stargazers_count,
                   forks: repo.forks_count,
                   openIssues: repo.open_issues_count,
+                  license: repo.license?.spdx_id || 'None',
                   lastUpdated: repo.updated_at,
                   visibility: repo.visibility,
-                  license: repo.license ? repo.license.spdx_id || repo.license.name : null,
                   homepage: repo.homepage,
                   html_url: repo.html_url
                 }
@@ -280,6 +288,8 @@ export default function Projects() {
     }
   }, [])
 
+  const isLight = theme === 'light'
+
   return (
     <section id="projects" className="relative py-28 px-6 max-w-6xl mx-auto">
       <SectionHeading
@@ -301,32 +311,46 @@ export default function Projects() {
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.7, delay: i * 0.15 }}
               whileHover={{
-                y: -8,
+                y: -6,
                 scale: 1.005,
-                boxShadow: theme === 'light'
-                  ? '0 20px 40px -10px rgba(15, 23, 42, 0.1), inset 0 0 20px rgba(0,0,0,0.01)'
-                  : '0 0 50px -10px rgba(56, 189, 248, 0.45), inset 0 0 20px rgba(255,255,255,0.02)'
+                boxShadow: isLight
+                  ? '0 20px 50px rgba(15, 23, 42, 0.15)'
+                  : '0 0 50px -10px rgba(56, 189, 248, 0.45)'
               }}
-              className="glass rounded-3xl p-6 sm:p-8 overflow-hidden transition-all duration-300 border border-slate-200 dark:border-white/10 relative group w-full"
+              className={`rounded-[24px] p-6 sm:p-10 lg:p-12 overflow-hidden transition-all duration-300 relative group w-full border ${
+                isLight 
+                  ? 'bg-white border-[rgba(148,163,184,0.18)] shadow-[0_12px_40px_rgba(15,23,42,0.08)]' 
+                  : 'glass border-white/10 shadow-2xl'
+              }`}
             >
               <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1.8fr] gap-8 items-stretch">
 
-                {/* Left Column: Banner */}
-                <div className="relative aspect-video lg:aspect-auto lg:h-full rounded-2xl overflow-hidden bg-slate-50 dark:bg-void-950/80 border border-slate-200/50 dark:border-white/5 group">
+                {/* Left Column: Preview Panel */}
+                <div className={`relative aspect-video lg:aspect-auto lg:h-full rounded-2xl overflow-hidden border transition-all duration-300 ${
+                  isLight 
+                    ? 'border-[rgba(148,163,184,0.18)] bg-white/40 shadow-sm' 
+                    : 'border-white/5 bg-void-950/80'
+                }`}>
                   <ProjectBanner
                     repoName={project.repoName}
                     title={project.title}
                     stack={project.stack}
                     category={project.category}
+                    theme={theme}
                   />
-                  <div className="absolute top-3 left-3 flex gap-2 z-10">
-                    <span className="px-2.5 py-1 rounded-full text-[10px] tracking-wider uppercase font-semibold border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-slate-900/85 text-slate-700 dark:text-slate-300 backdrop-blur-md">
+                  <div className="absolute top-4 left-4 flex gap-2 z-10">
+                    <span className={`h-[28px] px-3.5 flex items-center justify-center rounded-full text-[10px] font-bold tracking-wider uppercase border shadow-sm backdrop-blur-md transition-all duration-300 ${
+                      isLight 
+                        ? 'bg-white border-[#dbeafe] text-[#334155]' 
+                        : 'bg-white/[0.03] border-white/10 text-slate-200'
+                    }`}>
                       {project.category}
                     </span>
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] tracking-wider uppercase font-semibold border ${project.status === 'Active'
-                        ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
-                        : 'border-secondary/30 bg-secondary/15 text-[#0d9488] dark:text-secondary'
-                      } backdrop-blur-md`}>
+                    <span className={`h-[28px] px-3.5 flex items-center justify-center rounded-full text-[10px] font-bold tracking-wider uppercase border shadow-sm backdrop-blur-md transition-all duration-300 ${
+                      project.status === 'Completed'
+                        ? 'bg-[#d1fae5] border-[#a7f3d0] text-[#047857]'
+                        : 'bg-[#cffafe] border-[#a5f3fc] text-[#0369a1]'
+                    }`}>
                       {project.status}
                     </span>
                   </div>
@@ -335,22 +359,30 @@ export default function Projects() {
                 {/* Right Column: Details */}
                 <div className="flex flex-col justify-between">
                   <div>
-                    <h3 className="font-display font-bold text-2xl sm:text-3xl text-slate-900 dark:text-slate-100 group-hover:text-primary transition-colors duration-300">
+                    <h3 className={`font-display font-bold text-[28px] md:text-[32px] lg:text-[36px] tracking-tight transition-colors duration-300 ${
+                      isLight 
+                        ? 'bg-gradient-to-r from-[#38bdf8] to-[#0ea5e9] bg-clip-text text-transparent' 
+                        : 'text-slate-100 group-hover:text-[#38bdf8]'
+                    }`}>
                       {project.title}
                     </h3>
-                    <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed mt-3">
+                    <p className={`text-[17px] leading-[1.8] max-w-[620px] mt-4 mb-6 transition-colors duration-300 ${
+                      isLight ? 'text-[#64748b]' : 'text-slate-350'
+                    }`}>
                       {project.description}
                     </p>
 
                     {/* Features List */}
-                    <div className="mt-5">
-                      <p className="text-xs uppercase tracking-wider text-slate-400 dark:text-slate-400 font-semibold mb-2 flex items-center gap-1.5">
+                    <div className="mt-6">
+                      <p className={`text-[12px] font-bold uppercase tracking-[0.12em] mb-[14px] flex items-center gap-1.5 transition-colors duration-300 ${
+                        isLight ? 'text-[#334155]' : 'text-slate-400'
+                      }`}>
                         Key Features
                       </p>
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-slate-500 dark:text-slate-400">
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3.5 text-[16px] leading-[1.8] text-slate-500 dark:text-slate-450 mt-4">
                         {project.features.map((feature) => (
-                          <li key={feature} className="flex items-start gap-2">
-                            <span className="text-primary mt-1 text-xs">✓</span>
+                          <li key={feature} className="flex items-start gap-2.5">
+                            <span className="text-[#3b82f6] dark:text-[#38bdf8] font-bold mt-0.5">✓</span>
                             <span>{feature}</span>
                           </li>
                         ))}
@@ -358,16 +390,22 @@ export default function Projects() {
                     </div>
 
                     {/* Tech Stack Chips */}
-                    <div className="mt-5">
-                      <p className="text-xs uppercase tracking-wider text-slate-400 dark:text-slate-400 font-semibold mb-2">
+                    <div className="mt-6">
+                      <p className={`text-[12px] font-bold uppercase tracking-[0.12em] mb-[14px] transition-colors duration-300 ${
+                        isLight ? 'text-[#334155]' : 'text-slate-400'
+                      }`}>
                         Technologies Used
                       </p>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2.5 mt-4">
                         {project.stack.map((tech) => (
                           <motion.span
                             key={tech}
-                            whileHover={{ scale: 1.08, boxShadow: '0 0 15px rgba(56, 189, 248, 0.45)' }}
-                            className="inline-flex items-center text-xs font-semibold px-3 py-1 rounded-full border border-slate-200 dark:border-white/10 bg-slate-100/80 dark:bg-slate-900/60 text-slate-700 dark:text-slate-200"
+                            whileHover={{ scale: 1.03, y: -2 }}
+                            className={`h-[34px] px-3.5 inline-flex items-center gap-2 rounded-full border text-[13px] font-semibold shadow-sm transition-all duration-250 ${
+                              isLight 
+                                ? 'border-[#e2e8f0] bg-[#f8fafc] text-[#334155] hover:bg-white hover:border-[#3b82f6] hover:shadow-blue-500/5' 
+                                : 'border-white/10 bg-white/[0.03] text-slate-200 hover:bg-white/[0.06] hover:border-[#38bdf8]'
+                            }`}
                           >
                             <TechLogo tech={tech} />
                             {tech}
@@ -377,23 +415,27 @@ export default function Projects() {
                     </div>
 
                     {/* GitHub Stats */}
-                    <div className="mt-6 border-t border-slate-200 dark:border-white/10 pt-5">
-                      <p className="text-xs uppercase tracking-wider text-slate-400 dark:text-slate-400 font-semibold mb-3 flex items-center gap-1.5">
-                        <Github size={14} className="text-slate-400 dark:text-slate-400" /> GitHub Repository Statistics
+                    <div className="mt-6">
+                      <div className="h-[1px] w-full bg-[rgba(226,232,240,0.8)] dark:bg-white/10 my-8" />
+                      
+                      <p className={`text-[12px] font-bold uppercase tracking-[0.12em] mb-[14px] flex items-center gap-1.5 transition-colors duration-300 ${
+                        isLight ? 'text-[#334155]' : 'text-slate-400'
+                      }`}>
+                        <Github size={14} className="text-slate-400 dark:text-slate-550" /> GitHub Repository Statistics
                       </p>
 
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-3 text-xs text-slate-500 dark:text-slate-400">
-                        <span className="font-semibold text-slate-700 dark:text-slate-300">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-4 text-xs text-slate-550 dark:text-slate-400">
+                        <span className="font-semibold text-[#334155] dark:text-slate-355">
                           {githubData[project.repoName]?.name || project.repoName}
                         </span>
-                        <span className="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-600" />
-                        <span className="text-[9px] uppercase tracking-wider bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-1.5 py-0.5 rounded text-slate-550 dark:text-slate-400">
+                        <span className="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-650" />
+                        <span className="text-[9px] uppercase tracking-wider bg-slate-105 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-1.5 py-0.5 rounded font-bold text-slate-550 dark:text-slate-400">
                           {githubData[project.repoName]?.visibility || 'public'}
                         </span>
                         {githubData[project.repoName]?.language && (
                           <>
-                            <span className="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-600" />
-                            <span className="flex items-center gap-1">
+                            <span className="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-650" />
+                            <span className="flex items-center gap-1 font-medium text-slate-650 dark:text-slate-450">
                               <span
                                 className="w-2 h-2 rounded-full"
                                 style={{ backgroundColor: getLanguageColor(githubData[project.repoName].language) }}
@@ -405,42 +447,70 @@ export default function Projects() {
                       </div>
 
                       {loading ? (
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                           {Array.from({ length: 4 }).map((_, idx) => (
-                            <div key={idx} className="animate-pulse h-12 bg-slate-800/30 rounded-xl" />
+                            <div key={idx} className="animate-pulse h-[72px] bg-slate-800/30 rounded-xl" />
                           ))}
                         </div>
                       ) : (
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                          <div className="glass-strong rounded-xl p-2.5 text-center border border-slate-200 dark:border-white/5">
-                            <p className="text-slate-500 uppercase tracking-widest text-[9px] mb-0.5">Stars</p>
-                            <p className="font-display font-semibold text-slate-800 dark:text-slate-200 text-sm">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+                          <motion.div 
+                            whileHover={{ scale: 1.03 }}
+                            className={`flex-1 h-[72px] flex flex-col items-center justify-center rounded-[16px] border shadow-sm transition-all duration-300 ${
+                              isLight 
+                                ? 'border-[#e2e8f0] bg-white hover:border-[#3b82f6]/30 hover:shadow-md' 
+                                : 'border-white/10 bg-white/[0.03] hover:border-[#38bdf8]/30'
+                            }`}
+                          >
+                            <p className="text-slate-400 dark:text-slate-550 uppercase tracking-widest text-[9px] font-bold mb-0.5">Stars</p>
+                            <p className={`font-display font-extrabold text-lg transition-colors duration-300 ${isLight ? 'text-slate-800' : 'text-slate-200'}`}>
                               {githubData[project.repoName]?.stars !== undefined ? githubData[project.repoName].stars : 0}
                             </p>
-                          </div>
-                          <div className="glass-strong rounded-xl p-2.5 text-center border border-slate-200 dark:border-white/5">
-                            <p className="text-slate-500 uppercase tracking-widest text-[9px] mb-0.5">Forks</p>
-                            <p className="font-display font-semibold text-slate-800 dark:text-slate-200 text-sm">
+                          </motion.div>
+                          <motion.div 
+                            whileHover={{ scale: 1.03 }}
+                            className={`flex-1 h-[72px] flex flex-col items-center justify-center rounded-[16px] border shadow-sm transition-all duration-300 ${
+                              isLight 
+                                ? 'border-[#e2e8f0] bg-white hover:border-[#3b82f6]/30 hover:shadow-md' 
+                                : 'border-white/10 bg-white/[0.03] hover:border-[#38bdf8]/30'
+                            }`}
+                          >
+                            <p className="text-slate-400 dark:text-slate-550 uppercase tracking-widest text-[9px] font-bold mb-0.5">Forks</p>
+                            <p className={`font-display font-extrabold text-lg transition-colors duration-300 ${isLight ? 'text-slate-800' : 'text-slate-200'}`}>
                               {githubData[project.repoName]?.forks !== undefined ? githubData[project.repoName].forks : 0}
                             </p>
-                          </div>
-                          <div className="glass-strong rounded-xl p-2.5 text-center border border-slate-200 dark:border-white/5">
-                            <p className="text-slate-500 uppercase tracking-widest text-[9px] mb-0.5">Open Issues</p>
-                            <p className="font-display font-semibold text-slate-800 dark:text-slate-200 text-sm">
+                          </motion.div>
+                          <motion.div 
+                            whileHover={{ scale: 1.03 }}
+                            className={`flex-1 h-[72px] flex flex-col items-center justify-center rounded-[16px] border shadow-sm transition-all duration-300 ${
+                              isLight 
+                                ? 'border-[#e2e8f0] bg-white hover:border-[#3b82f6]/30 hover:shadow-md' 
+                                : 'border-white/10 bg-white/[0.03] hover:border-[#38bdf8]/30'
+                            }`}
+                          >
+                            <p className="text-slate-400 dark:text-slate-550 uppercase tracking-widest text-[9px] font-bold mb-0.5">Open Issues</p>
+                            <p className={`font-display font-extrabold text-lg transition-colors duration-300 ${isLight ? 'text-slate-800' : 'text-slate-200'}`}>
                               {githubData[project.repoName]?.openIssues !== undefined ? githubData[project.repoName].openIssues : 0}
                             </p>
-                          </div>
-                          <div className="glass-strong rounded-xl p-2.5 text-center border border-slate-200 dark:border-white/5">
-                            <p className="text-slate-500 uppercase tracking-widest text-[9px] mb-0.5">License</p>
-                            <p className="font-display font-semibold text-slate-800 dark:text-slate-200 text-sm truncate" title={githubData[project.repoName]?.license || 'None'}>
+                          </motion.div>
+                          <motion.div 
+                            whileHover={{ scale: 1.03 }}
+                            className={`flex-1 h-[72px] flex flex-col items-center justify-center rounded-[16px] border shadow-sm transition-all duration-300 ${
+                              isLight 
+                                ? 'border-[#e2e8f0] bg-white hover:border-[#3b82f6]/30 hover:shadow-md' 
+                                : 'border-white/10 bg-white/[0.03] hover:border-[#38bdf8]/30'
+                            }`}
+                          >
+                            <p className="text-slate-400 dark:text-slate-550 uppercase tracking-widest text-[9px] font-bold mb-0.5">License</p>
+                            <p className={`font-display font-extrabold text-sm truncate w-full px-1 text-center transition-colors duration-300 ${isLight ? 'text-slate-800' : 'text-slate-200'}`} title={githubData[project.repoName]?.license || 'None'}>
                               {githubData[project.repoName]?.license || 'None'}
                             </p>
-                          </div>
+                          </motion.div>
                         </div>
                       )}
 
                       {!loading && githubData[project.repoName]?.lastUpdated && (
-                        <p className="text-[10px] text-slate-550 dark:text-slate-500 mt-2.5 text-right italic">
+                        <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-3.5 text-right italic font-medium">
                           Last synchronized: {new Date(githubData[project.repoName].lastUpdated).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
@@ -452,7 +522,7 @@ export default function Projects() {
                   </div>
 
                   {/* Buttons container */}
-                  <div className="flex flex-wrap gap-3 mt-6">
+                  <div className="flex flex-wrap gap-3.5 mt-8">
                     {project.id === 'laura-finance-tracker' && (
                       <>
                         {homepageUrl && (
@@ -460,9 +530,13 @@ export default function Projects() {
                             href={homepageUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            whileHover={{ scale: 1.02 }}
+                            whileHover={{ scale: 1.02, y: -3 }}
                             whileTap={{ scale: 0.98 }}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 text-sm font-semibold hover:shadow-glow transition-shadow duration-300"
+                            className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
+                              isLight 
+                                ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
+                                : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
+                            }`}
                           >
                             <ExternalLink size={16} />
                             Live Demo
@@ -472,9 +546,13 @@ export default function Projects() {
                           href={repoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          whileHover={{ scale: 1.02 }}
+                          whileHover={{ scale: 1.02, y: -3 }}
                           whileTap={{ scale: 0.98 }}
-                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] hover:border-primary/45 hover:bg-primary/5 dark:hover:bg-primary/10 text-slate-700 dark:text-slate-200 text-sm font-semibold transition-all duration-300"
+                          className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
+                            isLight 
+                              ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
+                              : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
+                          }`}
                         >
                           <Github size={16} />
                           View Repository
@@ -483,9 +561,13 @@ export default function Projects() {
                           href={`${repoUrl}#readme`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          whileHover={{ scale: 1.02 }}
+                          whileHover={{ scale: 1.02, y: -3 }}
                           whileTap={{ scale: 0.98 }}
-                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100/50 dark:bg-slate-900/40 hover:border-accent/45 hover:bg-accent/5 dark:hover:bg-accent/10 text-slate-700 dark:text-slate-300 text-sm font-semibold transition-all duration-300"
+                          className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 border ${
+                            isLight 
+                              ? 'border-[#dbeafe] bg-white text-[#334155] shadow-sm hover:border-[#3b82f6] hover:bg-[#f0f9ff] hover:shadow-md' 
+                              : 'border-white/10 bg-white/[0.03] text-white hover:bg-white/[0.06] hover:border-[#38bdf8]'
+                          }`}
                         >
                           <BookOpen size={16} />
                           Read Documentation
@@ -500,9 +582,13 @@ export default function Projects() {
                             href={homepageUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            whileHover={{ scale: 1.02 }}
+                            whileHover={{ scale: 1.02, y: -3 }}
                             whileTap={{ scale: 0.98 }}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 text-sm font-semibold hover:shadow-glow transition-shadow duration-300"
+                            className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
+                              isLight 
+                                ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
+                                : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
+                            }`}
                           >
                             <ExternalLink size={16} />
                             Live Website
@@ -512,9 +598,13 @@ export default function Projects() {
                           href={repoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          whileHover={{ scale: 1.02 }}
+                          whileHover={{ scale: 1.02, y: -3 }}
                           whileTap={{ scale: 0.98 }}
-                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] hover:border-primary/45 hover:bg-primary/5 dark:hover:bg-primary/10 text-slate-700 dark:text-slate-200 text-sm font-semibold transition-all duration-300"
+                          className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
+                            isLight 
+                              ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
+                              : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
+                          }`}
                         >
                           <Github size={16} />
                           View Repository
@@ -523,9 +613,13 @@ export default function Projects() {
                           href={`${repoUrl}#readme`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          whileHover={{ scale: 1.02 }}
+                          whileHover={{ scale: 1.02, y: -3 }}
                           whileTap={{ scale: 0.98 }}
-                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100/50 dark:bg-slate-900/40 hover:border-accent/45 hover:bg-accent/5 dark:hover:bg-accent/10 text-slate-700 dark:text-slate-300 text-sm font-semibold transition-all duration-300"
+                          className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 border ${
+                            isLight 
+                              ? 'border-[#dbeafe] bg-white text-[#334155] shadow-sm hover:border-[#3b82f6] hover:bg-[#f0f9ff] hover:shadow-md' 
+                              : 'border-white/10 bg-white/[0.03] text-white hover:bg-white/[0.06] hover:border-[#38bdf8]'
+                          }`}
                         >
                           <BookOpen size={16} />
                           Source Code
@@ -540,9 +634,13 @@ export default function Projects() {
                             href={homepageUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            whileHover={{ scale: 1.02 }}
+                            whileHover={{ scale: 1.02, y: -3 }}
                             whileTap={{ scale: 0.98 }}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 text-sm font-semibold hover:shadow-glow transition-shadow duration-300"
+                            className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
+                              isLight 
+                                ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
+                                : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
+                            }`}
                           >
                             <ExternalLink size={16} />
                             Live Website
@@ -552,9 +650,13 @@ export default function Projects() {
                           href={repoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          whileHover={{ scale: 1.02 }}
+                          whileHover={{ scale: 1.02, y: -3 }}
                           whileTap={{ scale: 0.98 }}
-                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] hover:border-primary/45 hover:bg-primary/5 dark:hover:bg-primary/10 text-slate-700 dark:text-slate-200 text-sm font-semibold transition-all duration-300"
+                          className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
+                            isLight 
+                              ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
+                              : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
+                          }`}
                         >
                           <Github size={16} />
                           View Repository
@@ -572,4 +674,3 @@ export default function Projects() {
     </section>
   )
 }
-
