@@ -9,7 +9,6 @@ import JourneyTimeline from './components/JourneyTimeline'
 import SkillsGalaxy from './components/SkillsGalaxy'
 import Projects from './components/Projects'
 import GithubStats from './components/GithubStats'
-import LearningDashboard from './components/LearningDashboard'
 import Certifications from './components/Certifications'
 import Achievements from './components/Achievements'
 import CreativeCorner from './components/CreativeCorner'
@@ -79,7 +78,6 @@ export default function App() {
             <SkillsGalaxy />
             <Projects />
             <GithubStats />
-            <LearningDashboard />
             <Certifications />
             <Achievements />
             <CreativeCorner />

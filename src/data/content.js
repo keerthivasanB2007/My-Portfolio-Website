@@ -41,16 +41,6 @@ export const interests = [
   { title: 'Continuous Learning', desc: 'Treating "I don\'t know yet" as a to-do item, not a wall.' },
 ]
 
-export const learning = [
-  { skill: 'Spring Boot', progress: 65 },
-  { skill: 'Microservices', progress: 35 },
-  { skill: 'Docker', progress: 40 },
-  { skill: 'Kubernetes', progress: 15 },
-  { skill: 'System Design', progress: 50 },
-  { skill: 'DevOps', progress: 25 },
-  { skill: 'Backend Architecture', progress: 55 },
-]
-
 export const experience = [] // empty on purpose — shows the "next adventure" empty state
 
 export const testimonials = [
