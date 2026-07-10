@@ -265,7 +265,7 @@ function LanguageBadge({ language }) {
   )
 }
 
-function LanguageBadge({ language }) {
+function ProfileCard({ profile }) {
   const displayName = profile.name || profile.login
 
   return (
@@ -420,6 +420,8 @@ function ErrorBanner({ message }) {
 
 export default function GithubStats() {
   const { profile, repos, loading, error } = useGitHub(GITHUB_USERNAME)
+  const theme = usePortfolioTheme()
+  const embedUrls = useMemo(() => getEmbedUrls(theme), [theme])
 
   return (
     <section id="github" className="relative py-28 px-6 max-w-6xl mx-auto">
@@ -434,6 +436,24 @@ export default function GithubStats() {
         [data-theme='light'] .github-embed-img {
           filter: none;
         }
+        .github-readme-img {
+          width: 100%;
+          height: auto;
+          object-fit: contain;
+          border-radius: 16px;
+          transition: opacity 0.5s ease-in-out;
+        }
+        .github-readme-img.is-loading {
+          opacity: 0;
+          position: absolute;
+          top: 0;
+          left: 0;
+          pointer-events: none;
+        }
+        .github-readme-img.is-visible {
+          opacity: 1;
+          position: relative;
+        }
       `}</style>
 
       <SectionHeading eyebrow="Open Source" title="Building in public on GitHub" />
@@ -444,55 +464,56 @@ export default function GithubStats() {
         {/* Profile Card */}
         {loading ? <ProfileSkeleton /> : profile && <ProfileCard profile={profile} />}
 
-        {/* Contribution Graph */}
-        {loading ? (
-          <EmbedSkeleton height="h-32" />
-        ) : (
-          <GitHubEmbedCard
-            title="Contribution Activity"
-            src={EMBED_URLS.contribution}
-            alt={`${GITHUB_USERNAME}'s GitHub contribution graph`}
-            index={1}
-          />
-        )}
-
         {/* GitHub Stats + Streak */}
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {loading ? (
             <>
-              <EmbedSkeleton height="h-44" />
-              <EmbedSkeleton height="h-44" />
+              <EmbedSkeleton height="h-[195px]" />
+              <EmbedSkeleton height="h-[195px]" />
             </>
           ) : (
             <>
-              <GitHubEmbedCard
+              <GitHubImageCard
                 title="GitHub Stats"
-                src={EMBED_URLS.stats}
+                src={embedUrls.stats}
                 alt={`${GITHUB_USERNAME}'s GitHub statistics`}
-                index={2}
-                heightClass="min-h-[165px]"
+                index={1}
+                minHeight={195}
               />
-              <GitHubEmbedCard
+              <GitHubImageCard
                 title="Contribution Streak"
-                src={EMBED_URLS.streak}
+                src={embedUrls.streak}
                 alt={`${GITHUB_USERNAME}'s GitHub contribution streak`}
-                index={3}
-                heightClass="min-h-[165px]"
+                index={2}
+                minHeight={195}
               />
             </>
           )}
         </div>
 
+        {/* Contribution Graph */}
+        {loading ? (
+          <EmbedSkeleton height="h-[300px]" />
+        ) : (
+          <GitHubImageCard
+            title="Contribution Activity"
+            src={embedUrls.activityGraph}
+            alt={`${GITHUB_USERNAME}'s GitHub contribution graph`}
+            index={3}
+            minHeight={300}
+          />
+        )}
+
         {/* Top Languages */}
         {loading ? (
-          <EmbedSkeleton height="h-36" />
+          <EmbedSkeleton height="h-[165px]" />
         ) : (
-          <GitHubEmbedCard
+          <GitHubImageCard
             title="Top Languages"
-            src={EMBED_URLS.topLangs}
+            src={embedUrls.topLangs}
             alt={`${GITHUB_USERNAME}'s most used programming languages on GitHub`}
             index={4}
-            heightClass="min-h-[120px]"
+            minHeight={165}
           />
         )}
 
