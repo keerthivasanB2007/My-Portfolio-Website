@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Github, ExternalLink, Star, GitFork, AlertCircle, BookOpen } from 'lucide-react'
 import { projects } from '../data/projects'
 import SectionHeading from './SectionHeading'
+import ProjectGallery from './projects/ProjectGallery'
 
 // Local SVG assets imported
 import cssLogo from '../assets/logos/css-3.svg'
@@ -326,35 +327,19 @@ export default function Projects() {
               <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1.8fr] gap-8 items-stretch">
 
                 {/* Left Column: Preview Panel */}
-                <div className={`relative aspect-video lg:aspect-auto lg:h-full rounded-2xl overflow-hidden border transition-all duration-300 ${
-                  isLight 
-                    ? 'border-[rgba(148,163,184,0.18)] bg-white/40 shadow-sm' 
-                    : 'border-white/5 bg-void-950/80'
-                }`}>
-                  <ProjectBanner
-                    repoName={project.repoName}
-                    title={project.title}
-                    stack={project.stack}
-                    category={project.category}
-                    theme={theme}
-                  />
-                  <div className="absolute top-4 left-4 flex gap-2 z-10">
-                    <span className={`h-[28px] px-3.5 flex items-center justify-center rounded-full text-[10px] font-bold tracking-wider uppercase border shadow-sm backdrop-blur-md transition-all duration-300 ${
-                      isLight 
-                        ? 'bg-white border-[#dbeafe] text-[#334155]' 
-                        : 'bg-white/[0.03] border-white/10 text-slate-200'
-                    }`}>
-                      {project.category}
-                    </span>
-                    <span className={`h-[28px] px-3.5 flex items-center justify-center rounded-full text-[10px] font-bold tracking-wider uppercase border shadow-sm backdrop-blur-md transition-all duration-300 ${
-                      project.status === 'Completed'
-                        ? 'bg-[#d1fae5] border-[#a7f3d0] text-[#047857]'
-                        : 'bg-[#cffafe] border-[#a5f3fc] text-[#0369a1]'
-                    }`}>
-                      {project.status}
-                    </span>
-                  </div>
-                </div>
+                <ProjectGallery
+                  project={project}
+                  theme={theme}
+                  fallbackBanner={
+                    <ProjectBanner
+                      repoName={project.repoName}
+                      title={project.title}
+                      stack={project.stack}
+                      category={project.category}
+                      theme={theme}
+                    />
+                  }
+                />
 
                 {/* Right Column: Details */}
                 <div className="flex flex-col justify-between">

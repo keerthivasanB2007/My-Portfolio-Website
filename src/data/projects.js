@@ -1,3 +1,15 @@
+import lauraDashboard from '../assets/projects/laura/laura_dashboard.png'
+import lauraTransactions from '../assets/projects/laura/laura_transactions.png'
+import lauraAddtransactions from '../assets/projects/laura/laura_addtransactions.png'
+import lauraAnalysis from '../assets/projects/laura/laura_analysis.png'
+import lauraBackup from '../assets/projects/laura/laura_backup.png'
+import lauraCatagories from '../assets/projects/laura/laura_catagories.png'
+import lauraProfile from '../assets/projects/laura/laura_profile.png'
+
+import portfolioDashboard from '../assets/projects/my_portfolio/portfolio_dashboard.png'
+import portfolioSkillsection from '../assets/projects/my_portfolio/portfolio_skillsection.png'
+import portfolioJourneysection from '../assets/projects/my_portfolio/portfolio_journeysection.png'
+
 export const projects = [
   {
     id: 'laura-finance-tracker',
@@ -17,7 +29,16 @@ export const projects = [
       'Dark Mode'
     ],
     demo: null,
-    github: 'https://github.com/keerthivasanB2007/Laura-Finance-Tracker'
+    github: 'https://github.com/keerthivasanB2007/Laura-Finance-Tracker',
+    screenshots: [
+      { id: 'dashboard', src: lauraDashboard, label: 'Dashboard', alt: 'Laura Finance Tracker Dashboard showing financial summary' },
+      { id: 'transactions', src: lauraTransactions, label: 'Transactions', alt: 'Transaction history list itemizing expenses' },
+      { id: 'addtransactions', src: lauraAddtransactions, label: 'Add Transactions', alt: 'Interface to add new expenses and income' },
+      { id: 'analysis', src: lauraAnalysis, label: 'Analysis', alt: 'Detailed charts and spending analysis breakdown' },
+      { id: 'backup', src: lauraBackup, label: 'Backup & Restore', alt: 'Backup and database restore configuration options' },
+      { id: 'categories', src: lauraCatagories, label: 'Categories', alt: 'Category configuration and icon customizer' },
+      { id: 'profile', src: lauraProfile, label: 'Profile', alt: 'User settings, profile configurations and account statistics' }
+    ]
   },
   {
     id: 'my-portfolio-website',
@@ -36,7 +57,12 @@ export const projects = [
       'Modern UI'
     ],
     demo: 'https://keerthivasan-b.vercel.app',
-    github: 'https://github.com/keerthivasanB2007/My-Portfolio-Website'
+    github: 'https://github.com/keerthivasanB2007/My-Portfolio-Website',
+    screenshots: [
+      { id: 'dashboard', src: portfolioDashboard, label: 'Dashboard', alt: 'Portfolio home screen with interactive features' },
+      { id: 'journey', src: portfolioJourneysection, label: 'Journey', alt: 'Academic and career journey timeline section' },
+      { id: 'skills', src: portfolioSkillsection, label: 'Skills', alt: 'Interactive skills visualization galaxy' }
+    ]
   },
   {
     id: 'my-first-website',

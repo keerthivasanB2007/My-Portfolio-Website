@@ -10,7 +10,6 @@ import SkillsGalaxy from './components/SkillsGalaxy'
 import Projects from './components/Projects'
 import GithubStats from './components/GithubStats'
 import Certifications from './components/Certifications'
-import Achievements from './components/Achievements'
 import CreativeCorner from './components/CreativeCorner'
 import Interests from './components/Interests'
 import Blog from './components/Blog'
@@ -79,7 +78,6 @@ export default function App() {
             <Projects />
             <GithubStats />
             <Certifications />
-            <Achievements />
             <CreativeCorner />
             <Interests />
             <Blog />
