@@ -1,13 +1,13 @@
-import { Terminal, Network, Cpu, Server, Brain } from 'lucide-react'
+// import { Terminal, Network, Cpu, Server, Brain } from 'lucide-react'
 
-export const blogPosts = [
-  { title: 'How HTTP Works', excerpt: 'Breaking down what actually happens between typing a URL and seeing a page.', tag: 'Networking', icon: Network },
-  { title: 'My Java Journey', excerpt: 'From confusing syntax errors to genuinely enjoying object-oriented design.', tag: 'Java', icon: Terminal },
-  { title: 'Networking Basics', excerpt: 'Sockets, ports, and packets — the vocabulary every backend developer needs.', tag: 'Networking', icon: Network },
-  { title: 'Backend Development, Demystified', excerpt: 'What a backend actually does, explained without the jargon.', tag: 'Backend', icon: Server },
-  { title: 'Operating Systems 101', excerpt: 'Processes, threads, and memory — the invisible machinery under every app.', tag: 'Systems', icon: Cpu },
-  { title: 'Learning AI as a Backend Developer', excerpt: 'Why understanding AI matters even if you never build a model yourself.', tag: 'AI', icon: Brain },
-]
+// export const blogPosts = [
+//   { title: 'How HTTP Works', excerpt: 'Breaking down what actually happens between typing a URL and seeing a page.', tag: 'Networking', icon: Network },
+//   { title: 'My Java Journey', excerpt: 'From confusing syntax errors to genuinely enjoying object-oriented design.', tag: 'Java', icon: Terminal },
+//   { title: 'Networking Basics', excerpt: 'Sockets, ports, and packets — the vocabulary every backend developer needs.', tag: 'Networking', icon: Network },
+//   { title: 'Backend Development, Demystified', excerpt: 'What a backend actually does, explained without the jargon.', tag: 'Backend', icon: Server },
+//   { title: 'Operating Systems 101', excerpt: 'Processes, threads, and memory — the invisible machinery under every app.', tag: 'Systems', icon: Cpu },
+//   { title: 'Learning AI as a Backend Developer', excerpt: 'Why understanding AI matters even if you never build a model yourself.', tag: 'AI', icon: Brain },
+// ]
 
 
 export const funFacts = [
@@ -31,7 +31,3 @@ export const interests = [
 
 export const experience = [] // empty on purpose — shows the "next adventure" empty state
 
-export const testimonials = [
-  { name: 'Placeholder Mentor', role: 'Faculty Advisor', quote: 'Replace this with a real quote once you\'ve collected feedback from mentors, peers, or collaborators.' },
-  { name: 'Placeholder Collaborator', role: 'Project Partner', quote: 'This section is ready for genuine testimonials — swap these placeholders out any time.' },
-]

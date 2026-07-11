@@ -10,7 +10,6 @@ const LINKS = [
   { id: 'projects', label: 'Projects' },
   { id: 'github', label: 'GitHub' },
   { id: 'creative', label: 'Creative' },
-  { id: 'blog', label: 'Blog' },
   { id: 'contact', label: 'Contact' },
 ]
 
@@ -20,7 +19,7 @@ export default function Navbar({ theme = 'dark', setTheme }) {
 
   const scrollTo = (id) => {
     setOpen(false)
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   const activeTheme = theme === 'light' ? 'light' : 'dark'

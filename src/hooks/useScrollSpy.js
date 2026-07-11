@@ -1,24 +1,37 @@
 import { useEffect, useState } from 'react'
 
-// Tracks which section id is currently most visible in the viewport.
-export function useScrollSpy(ids, offset = 200) {
+export function useScrollSpy(ids) {
   const [active, setActive] = useState(ids[0])
 
   useEffect(() => {
-    const handler = () => {
-      let current = ids[0]
-      for (const id of ids) {
-        const el = document.getElementById(id)
-        if (!el) continue
-        const top = el.getBoundingClientRect().top
-        if (top - offset <= 0) current = id
-      }
-      setActive(current)
+    const observerOptions = {
+      root: null,
+      rootMargin: '-30% 0px -50% 0px', // Focused zone in viewport center
+      threshold: 0,
     }
-    window.addEventListener('scroll', handler, { passive: true })
-    handler()
-    return () => window.removeEventListener('scroll', handler)
-  }, [ids, offset])
+
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActive(entry.target.id)
+        }
+      })
+    }
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions)
+    
+    ids.forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+
+    return () => {
+      ids.forEach((id) => {
+        const el = document.getElementById(id)
+        if (el) observer.unobserve(el)
+      })
+    }
+  }, [ids])
 
   return active
 }

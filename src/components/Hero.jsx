@@ -48,7 +48,7 @@ export default function Hero() {
     return () => window.removeEventListener('mousemove', onMove)
   }, [])
 
-  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
   return (
     <section

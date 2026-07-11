@@ -12,7 +12,6 @@ import GithubStats from './components/GithubStats'
 import Certifications from './components/Certifications'
 import CreativeCorner from './components/CreativeCorner'
 import Interests from './components/Interests'
-import Blog from './components/Blog'
 import Experience from './components/Experience'
 import Testimonials from './components/Testimonials'
 import FunFacts from './components/FunFacts'
@@ -80,7 +79,6 @@ export default function App() {
             <Certifications />
             <CreativeCorner />
             <Interests />
-            <Blog />
             <Experience />
             <Testimonials />
             <FunFacts />
