@@ -192,6 +192,11 @@ function MagneticButton({ children, onClick, href, download, primary, ...props }
 
   const Component = href ? 'a' : 'button'
 
+  const finalHref =
+    href && !href.startsWith("http") && !href.startsWith("mailto:") && !href.startsWith("tel:")
+      ? `${import.meta.env.BASE_URL}${href.replace(/^\/+/, "")}`
+      : href;
+
   return (
     <motion.div
       ref={ref}
@@ -203,7 +208,7 @@ function MagneticButton({ children, onClick, href, download, primary, ...props }
     >
       <Component
         onClick={onClick}
-        href={href}
+        href={finalHref}
         download={download}
         className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${classes}`}
         data-cursor-hover

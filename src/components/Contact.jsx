@@ -206,7 +206,7 @@ export default function Contact() {
               <motion.a
                 whileHover={{ y: -3 }}
                 whileTap={{ scale: 0.98 }}
-                href="/Keerthivasan_B_Resume.pdf"
+                href={`${import.meta.env.BASE_URL}Keerthivasan_B_Resume.pdf`}
                 download="Keerthivasan_B_Resume.pdf"
                 aria-label="Download Resume"
                 className="relative inline-flex items-center justify-center p-[1px] rounded-full bg-gradient-to-r from-primary via-accent to-highlight overflow-hidden flex-1 shadow-sm"
