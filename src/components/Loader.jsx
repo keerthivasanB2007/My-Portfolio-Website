@@ -78,7 +78,7 @@ export default function Loader({ onDone }) {
 
     const tick = () => {
       const now = performance.now()
-      const elapsed = (now - startTime) / 1000 // in seconds
+      const elapsed = ((now - startTime) / 1000) * 1.8 // Speed up sequence by 1.8x
       setElapsedTime(elapsed)
       if (elapsed < 5.3) {
         animFrame = requestAnimationFrame(tick)

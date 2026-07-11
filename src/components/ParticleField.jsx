@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useState, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
@@ -15,6 +15,7 @@ function Particles({ count = 1400 }) {
   }, [count])
 
   useFrame((state) => {
+    if (document.hidden) return
     if (!pointsRef.current) return
     const t = state.clock.getElapsedTime()
     pointsRef.current.rotation.y = t * 0.015
@@ -43,10 +44,18 @@ function Particles({ count = 1400 }) {
 }
 
 export default function ParticleField() {
+  const [particleCount, setParticleCount] = useState(1400)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const isMobile = window.innerWidth < 768
+    setParticleCount(isMobile ? 600 : 1400)
+  }, [])
+
   return (
     <div className="absolute inset-0 -z-10" aria-hidden="true">
       <Canvas camera={{ position: [0, 0, 5], fov: 55 }} dpr={[1, 1.5]}>
-        <Particles />
+        <Particles count={particleCount} />
       </Canvas>
     </div>
   )

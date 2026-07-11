@@ -88,6 +88,7 @@ export default function BrowserGallery({ screenshots, theme }) {
                 transition={{ duration: 0.4 }}
                 className="w-full h-full object-cover rounded-b-xl"
                 loading={currentIndex === 0 ? "eager" : "lazy"}
+                decoding="async"
               />
             </AnimatePresence>
           </div>

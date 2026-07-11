@@ -46,11 +46,14 @@ function Planet({ skill, position, onHover, hovered }) {
   const isHovered = hovered === skill.id
 
   useFrame((state) => {
+    if (document.hidden) return
     if (!meshRef.current) return
     const t = state.clock.getElapsedTime()
     meshRef.current.position.y = position[1] + Math.sin(t * 0.6 + position[0]) * 0.15
     const target = isHovered ? 1.6 : 1
-    meshRef.current.scale.lerp({ x: target, y: target, z: target }, 0.15)
+    meshRef.current.scale.x += (target - meshRef.current.scale.x) * 0.15
+    meshRef.current.scale.y += (target - meshRef.current.scale.y) * 0.15
+    meshRef.current.scale.z += (target - meshRef.current.scale.z) * 0.15
   })
 
   return (
@@ -120,6 +123,7 @@ function ConstellationLabels({ labels }) {
 function Scene({ positions, labels, hovered, setHovered }) {
   const groupRef = useRef(null)
   useFrame((_, delta) => {
+    if (document.hidden) return
     if (groupRef.current) groupRef.current.rotation.y += delta * 0.04
   })
 

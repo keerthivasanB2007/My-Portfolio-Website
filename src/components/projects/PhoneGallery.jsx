@@ -126,6 +126,7 @@ export default function PhoneGallery({ screenshots, theme }) {
                   transition={{ duration: 0.4 }}
                   className="w-full h-full object-cover select-none pointer-events-none rounded-[26px]"
                   loading={currentIndex === 0 ? "eager" : "lazy"}
+                  decoding="async"
                 />
               </AnimatePresence>
             </motion.div>

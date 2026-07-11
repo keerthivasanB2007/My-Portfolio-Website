@@ -100,6 +100,7 @@ function ArtworkCard({ artwork, index, onClick, theme }) {
           src={artwork.src}
           alt={artwork.alt}
           loading="lazy"
+          decoding="async"
           onLoad={() => setLoaded(true)}
           className={`w-full h-auto object-cover select-none pointer-events-none transition-all duration-500 group-hover:scale-105 rounded-t-[24px] ${
             loaded ? 'opacity-100' : 'opacity-0 scale-95 blur-sm'
@@ -307,6 +308,7 @@ export default function CreativeCorner() {
                 <img
                   src={ARTWORKS[activeIdx].src}
                   alt={ARTWORKS[activeIdx].alt}
+                  decoding="async"
                   className="max-w-full max-h-[70vh] sm:max-h-[75vh] object-contain rounded-2xl shadow-2xl border border-white/10"
                 />
 

@@ -143,6 +143,7 @@ export default function Certifications() {
                           src={cert.src}
                           alt={cert.alt}
                           loading="lazy"
+                          decoding="async"
                           onLoad={() => setImageLoaded(prev => ({ ...prev, [cert.id]: true }))}
                           className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-[1.04] rounded-xl ${
                             imageLoaded[cert.id] ? 'opacity-100 blur-0' : 'opacity-0 blur-sm'
@@ -244,6 +245,7 @@ export default function Certifications() {
                 <img
                   src={lightboxImg.src}
                   alt={lightboxImg.alt}
+                  decoding="async"
                   className="max-w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl border border-white/10"
                 />
 

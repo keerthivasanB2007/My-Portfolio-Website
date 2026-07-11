@@ -1,24 +1,62 @@
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState, lazy, Suspense, useRef } from 'react'
 import Lenis from '@studio-freight/lenis'
 
 import Loader from './components/Loader'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-import About from './components/About'
-import JourneyTimeline from './components/JourneyTimeline'
-import SkillsGalaxy from './components/SkillsGalaxy'
-import Projects from './components/Projects'
-import GithubStats from './components/GithubStats'
-import Certifications from './components/Certifications'
-import CreativeCorner from './components/CreativeCorner'
-import Interests from './components/Interests'
-import Experience from './components/Experience'
-import Testimonials from './components/Testimonials'
-import FunFacts from './components/FunFacts'
-import Contact from './components/Contact'
-import Footer from './components/Footer'
 import CursorGlow from './components/CursorGlow'
 import EasterEggs from './components/EasterEggs'
+
+const About = lazy(() => import('./components/About'))
+const JourneyTimeline = lazy(() => import('./components/JourneyTimeline'))
+const SkillsGalaxy = lazy(() => import('./components/SkillsGalaxy'))
+const Projects = lazy(() => import('./components/Projects'))
+const GithubStats = lazy(() => import('./components/GithubStats'))
+const Certifications = lazy(() => import('./components/Certifications'))
+const CreativeCorner = lazy(() => import('./components/CreativeCorner'))
+const Interests = lazy(() => import('./components/Interests'))
+const Experience = lazy(() => import('./components/Experience'))
+const Testimonials = lazy(() => import('./components/Testimonials'))
+const FunFacts = lazy(() => import('./components/FunFacts'))
+const Contact = lazy(() => import('./components/Contact'))
+const Footer = lazy(() => import('./components/Footer'))
+
+function SectionLoader() {
+  return (
+    <div className="w-full py-16 flex items-center justify-center">
+      <div className="w-8 h-8 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
+    </div>
+  )
+}
+
+function DeferredSection({ children, id, height = '400px' }) {
+  const [isVisible, setIsVisible] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '250px' }
+    )
+
+    const el = ref.current
+    if (el) observer.observe(el)
+
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div id={isVisible ? undefined : id} ref={ref} style={{ minHeight: isVisible ? 'auto' : height }}>
+      {isVisible ? children : null}
+    </div>
+  )
+}
 
 export default function App() {
   const [loading, setLoading] = useState(true)
@@ -71,20 +109,63 @@ export default function App() {
           <Navbar theme={theme} setTheme={setTheme} />
           <main>
             <Hero />
-            <About />
-            <JourneyTimeline />
-            <SkillsGalaxy />
-            <Projects />
-            <GithubStats />
-            <Certifications />
-            <CreativeCorner />
-            <Interests />
-            <Experience />
-            <Testimonials />
-            <FunFacts />
-            <Contact />
+            
+            <Suspense fallback={<SectionLoader />}>
+              <DeferredSection id="about" height="550px">
+                <About />
+              </DeferredSection>
+
+              <DeferredSection id="journey" height="900px">
+                <JourneyTimeline />
+              </DeferredSection>
+
+              <DeferredSection id="skills" height="750px">
+                <SkillsGalaxy />
+              </DeferredSection>
+
+              <DeferredSection id="projects" height="1000px">
+                <Projects />
+              </DeferredSection>
+
+              <DeferredSection id="github" height="600px">
+                <GithubStats />
+              </DeferredSection>
+
+              <DeferredSection id="certifications" height="550px">
+                <Certifications />
+              </DeferredSection>
+
+              <DeferredSection id="creative" height="800px">
+                <CreativeCorner />
+              </DeferredSection>
+
+              <DeferredSection id="interests" height="500px">
+                <Interests />
+              </DeferredSection>
+
+              <DeferredSection id="experience" height="350px">
+                <Experience />
+              </DeferredSection>
+
+              <DeferredSection id="testimonials" height="450px">
+                <Testimonials />
+              </DeferredSection>
+
+              <DeferredSection id="funfacts" height="350px">
+                <FunFacts />
+              </DeferredSection>
+
+              <DeferredSection id="contact" height="700px">
+                <Contact />
+              </DeferredSection>
+            </Suspense>
           </main>
-          <Footer />
+          
+          <Suspense fallback={<SectionLoader />}>
+            <DeferredSection id="footer" height="200px">
+              <Footer />
+            </DeferredSection>
+          </Suspense>
         </>
       )}
     </div>
