@@ -115,7 +115,11 @@ export default function Hero() {
             <MagneticButton onClick={() => scrollTo('projects')} primary>
               <FolderOpen size={18} /> View Projects
             </MagneticButton>
-            <MagneticButton href="/resume.pdf" download>
+            <MagneticButton 
+              href="/Keerthivasan_B_Resume.pdf" 
+              download="Keerthivasan_B_Resume.pdf"
+              aria-label="Download Resume"
+            >
               <Download size={18} /> Download Resume
             </MagneticButton>
             <MagneticButton onClick={() => scrollTo('contact')}>
@@ -170,7 +174,7 @@ export default function Hero() {
   )
 }
 
-function MagneticButton({ children, onClick, href, download, primary }) {
+function MagneticButton({ children, onClick, href, download, primary, ...props }) {
   const ref = useRef(null)
   const [pos, setPos] = useState({ x: 0, y: 0 })
 
@@ -194,15 +198,16 @@ function MagneticButton({ children, onClick, href, download, primary }) {
       onMouseMove={handleMove}
       onMouseLeave={reset}
       animate={{ x: pos.x, y: pos.y }}
-      transition={{ type: 'spring', stiffness: 150, damping: 12 }}
-      className="btn-magnetic"
+      transition={{ type: 'spring', stiffness: 150, damping: 15 }}
+      className="inline-block"
     >
       <Component
+        onClick={onClick}
         href={href}
         download={download}
-        onClick={onClick}
+        className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${classes}`}
         data-cursor-hover
-        className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-sm transition-transform hover:scale-105 ${classes}`}
+        {...props}
       >
         {children}
       </Component>

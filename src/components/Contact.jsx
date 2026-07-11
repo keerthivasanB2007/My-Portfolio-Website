@@ -206,8 +206,9 @@ export default function Contact() {
               <motion.a
                 whileHover={{ y: -3 }}
                 whileTap={{ scale: 0.98 }}
-                href="/resume.pdf"
-                download
+                href="/Keerthivasan_B_Resume.pdf"
+                download="Keerthivasan_B_Resume.pdf"
+                aria-label="Download Resume"
                 className="relative inline-flex items-center justify-center p-[1px] rounded-full bg-gradient-to-r from-primary via-accent to-highlight overflow-hidden flex-1 shadow-sm"
               >
                 <span className={`w-full h-full rounded-full px-5 py-3 flex items-center justify-center gap-2 text-xs font-bold transition-all duration-300 ${
