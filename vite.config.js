@@ -18,13 +18,7 @@ export default defineConfig({
             if (id.includes('gsap')) {
               return 'vendor-gsap'
             }
-            if (id.includes('@emailjs')) {
-              return 'vendor-emailjs'
-            }
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'vendor-react'
-            }
-            return 'vendor-others'
+            return 'vendor-libs'
           }
         }
       }

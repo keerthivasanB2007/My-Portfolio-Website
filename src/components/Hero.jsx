@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { ArrowDown, Download, GraduationCap, Mail, FolderOpen } from 'lucide-react'
 import ParticleField from './ParticleField'
 
@@ -36,17 +36,27 @@ function useTypingEffect(words, typeSpeed = 70, deleteSpeed = 40, pause = 1400) 
 export default function Hero() {
   const typed = useTypingEffect(ROLES)
   const heroRef = useRef(null)
-  const [tilt, setTilt] = useState({ x: 0, y: 0 })
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  const springX = useSpring(mouseX, { stiffness: 40, damping: 20 })
+  const springY = useSpring(mouseY, { stiffness: 40, damping: 20 })
+
+  const x1 = useTransform(springX, (x) => x * -30)
+  const y1 = useTransform(springY, (y) => y * -20)
+  const x2 = useTransform(springX, (x) => x * 30)
+  const y2 = useTransform(springY, (y) => y * 20)
 
   useEffect(() => {
     const onMove = (e) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 2
       const y = (e.clientY / window.innerHeight - 0.5) * 2
-      setTilt({ x, y })
+      mouseX.set(x)
+      mouseY.set(y)
     }
-    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mousemove', onMove, { passive: true })
     return () => window.removeEventListener('mousemove', onMove)
-  }, [])
+  }, [mouseX, mouseY])
 
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
@@ -61,15 +71,11 @@ export default function Hero() {
       {/* Ambient gradient blobs, parallaxing gently with the cursor */}
       <motion.div
         className="hero-profile-glow absolute w-[36rem] h-[36rem] rounded-full bg-primary/20 blur-[120px] -z-10"
-        style={{ top: '10%', left: '10%' }}
-        animate={{ x: tilt.x * -30, y: tilt.y * -20 }}
-        transition={{ type: 'spring', stiffness: 40, damping: 20 }}
+        style={{ top: '10%', left: '10%', x: x1, y: y1 }}
       />
       <motion.div
         className="absolute w-[30rem] h-[30rem] rounded-full bg-accent/20 blur-[120px] -z-10"
-        style={{ bottom: '5%', right: '10%' }}
-        animate={{ x: tilt.x * 30, y: tilt.y * 20 }}
-        transition={{ type: 'spring', stiffness: 40, damping: 20 }}
+        style={{ bottom: '5%', right: '10%', x: x2, y: y2 }}
       />
 
       <div className="relative z-10 grid w-full max-w-7xl items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
