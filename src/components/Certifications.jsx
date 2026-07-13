@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Award, Eye, X, Download } from 'lucide-react'
 import { certificates } from '../data/certificates'
 import SectionHeading from './SectionHeading'
 
-export default function Certifications() {
+function Certifications() {
   const [theme, setTheme] = useState(
     () => typeof document !== 'undefined' ? (document.documentElement.dataset.theme || 'dark') : 'dark'
   )
@@ -275,3 +275,5 @@ export default function Certifications() {
     </section>
   )
 }
+
+export default memo(Certifications)

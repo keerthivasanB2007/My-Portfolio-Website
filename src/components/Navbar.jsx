@@ -13,9 +13,11 @@ const LINKS = [
   { id: 'contact', label: 'Contact' },
 ]
 
+const LINK_IDS = LINKS.map((l) => l.id)
+
 export default function Navbar({ theme = 'dark', setTheme }) {
   const [open, setOpen] = useState(false)
-  const active = useScrollSpy(LINKS.map((l) => l.id))
+  const active = useScrollSpy(LINK_IDS)
 
   const scrollTo = (id) => {
     setOpen(false)

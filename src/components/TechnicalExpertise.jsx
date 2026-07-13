@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { motion } from 'framer-motion'
 import { 
   SiSpringboot, 
@@ -144,7 +144,7 @@ function LogoTile({ name, icon: Icon, logo, color, shadowColor, badge }) {
   )
 }
 
-export default function TechnicalExpertise() {
+function TechnicalExpertise() {
   const categoriesData = [
     {
       id: 'programming-languages',
@@ -436,3 +436,5 @@ export default function TechnicalExpertise() {
     </div>
   )
 }
+
+export default memo(TechnicalExpertise)

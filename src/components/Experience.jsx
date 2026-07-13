@@ -1,9 +1,10 @@
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { Compass } from 'lucide-react'
 import { experience } from '../data/content'
 import SectionHeading from './SectionHeading'
 
-export default function Experience() {
+function Experience() {
   return (
     <section id="experience" className="relative py-28 px-6 max-w-4xl mx-auto">
       <SectionHeading eyebrow="Experience" title="Internships, freelancing & competitions" center />
@@ -30,3 +31,5 @@ export default function Experience() {
     </section>
   )
 }
+
+export default memo(Experience)

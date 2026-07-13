@@ -17,8 +17,6 @@ export default function CursorGlow() {
     const onMove = (e) => {
       mouseX = e.clientX
       mouseY = e.clientY
-      dot.style.left = `${mouseX}px`
-      dot.style.top = `${mouseY}px`
     }
 
     const onOver = (e) => {
@@ -30,14 +28,17 @@ export default function CursorGlow() {
 
     let raf
     const animate = () => {
-      ringX += (mouseX - ringX) * 0.18
-      ringY += (mouseY - ringY) * 0.18
-      ring.style.left = `${ringX}px`
-      ring.style.top = `${ringY}px`
+      if (!document.hidden) {
+        dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`
+        
+        ringX += (mouseX - ringX) * 0.18
+        ringY += (mouseY - ringY) * 0.18
+        ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`
+      }
       raf = requestAnimationFrame(animate)
     }
 
-    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mousemove', onMove, { passive: true })
     window.addEventListener('mouseover', onOver)
     raf = requestAnimationFrame(animate)
 

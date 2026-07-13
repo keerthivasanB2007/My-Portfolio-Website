@@ -217,6 +217,362 @@ const ProjectBanner = memo(function ProjectBanner({ repoName, title, stack, cate
   )
 })
 
+const ProjectCard = memo(function ProjectCard({ project, githubDataForRepo, loading, theme, index }) {
+  const isLight = theme === 'light'
+  const repoUrl = githubDataForRepo?.html_url || project.github || `https://github.com/keerthivasanB2007/${project.repoName}`
+  const homepageUrl = githubDataForRepo?.homepage || project.demo
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.7, delay: index * 0.15 }}
+      whileHover={{
+        y: -6,
+        scale: 1.005,
+        boxShadow: isLight
+          ? '0 20px 50px rgba(15, 23, 42, 0.15)'
+          : '0 0 50px -10px rgba(56, 189, 248, 0.45)'
+      }}
+      className={`rounded-[24px] p-6 sm:p-10 lg:p-12 overflow-hidden transition-all duration-300 relative group w-full border ${
+        isLight 
+          ? 'bg-white border-[rgba(148,163,184,0.18)] shadow-[0_12px_40px_rgba(15,23,42,0.08)]' 
+          : 'glass border-white/10 shadow-2xl'
+      }`}
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1.8fr] gap-8 items-stretch">
+
+        {/* Left Column: Preview Panel */}
+        <ProjectGallery
+          project={project}
+          theme={theme}
+          fallbackBanner={
+            <ProjectBanner
+              repoName={project.repoName}
+              title={project.title}
+              stack={project.stack}
+              category={project.category}
+              theme={theme}
+            />
+          }
+        />
+
+        {/* Right Column: Details */}
+        <div className="flex flex-col justify-between">
+          <div>
+            <h3 className={`font-display font-bold text-[28px] md:text-[32px] lg:text-[36px] tracking-tight transition-colors duration-300 ${
+              isLight 
+                ? 'bg-gradient-to-r from-[#38bdf8] to-[#0ea5e9] bg-clip-text text-transparent' 
+                : 'text-slate-100 group-hover:text-[#38bdf8]'
+            }`}>
+              {project.title}
+            </h3>
+            <p className={`text-[17px] leading-[1.8] max-w-[620px] mt-4 mb-6 transition-colors duration-300 ${
+              isLight ? 'text-[#64748b]' : 'text-slate-350'
+            }`}>
+              {project.description}
+            </p>
+
+            {/* Features List */}
+            <div className="mt-6">
+              <p className={`text-[12px] font-bold uppercase tracking-[0.12em] mb-[14px] flex items-center gap-1.5 transition-colors duration-300 ${
+                isLight ? 'text-[#334155]' : 'text-slate-400'
+              }`}>
+                Key Features
+              </p>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3.5 text-[16px] leading-[1.8] text-slate-500 dark:text-slate-450 mt-4">
+                {project.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2.5">
+                    <span className="text-[#3b82f6] dark:text-[#38bdf8] font-bold mt-0.5">✓</span>
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Tech Stack Chips */}
+            <div className="mt-6">
+              <p className={`text-[12px] font-bold uppercase tracking-[0.12em] mb-[14px] transition-colors duration-300 ${
+                isLight ? 'text-[#334155]' : 'text-slate-400'
+              }`}>
+                Technologies Used
+              </p>
+              <div className="flex flex-wrap gap-2.5 mt-4">
+                {project.stack.map((tech) => (
+                  <motion.span
+                    key={tech}
+                    whileHover={{ scale: 1.03, y: -2 }}
+                    className={`h-[34px] px-3.5 inline-flex items-center gap-2 rounded-full border text-[13px] font-semibold shadow-sm transition-all duration-250 ${
+                      isLight 
+                        ? 'border-[#e2e8f0] bg-[#f8fafc] text-[#334155] hover:bg-white hover:border-[#3b82f6] hover:shadow-blue-500/5' 
+                        : 'border-white/10 bg-white/[0.03] text-slate-200 hover:bg-white/[0.06] hover:border-[#38bdf8]'
+                    }`}
+                  >
+                    <TechLogo tech={tech} />
+                    {tech}
+                  </motion.span>
+                ))}
+              </div>
+            </div>
+
+            {/* GitHub Stats */}
+            <div className="mt-6">
+              <div className="h-[1px] w-full bg-[rgba(226,232,240,0.8)] dark:bg-white/10 my-8" />
+              
+              <p className={`text-[12px] font-bold uppercase tracking-[0.12em] mb-[14px] flex items-center gap-1.5 transition-colors duration-300 ${
+                isLight ? 'text-[#334155]' : 'text-slate-400'
+              }`}>
+                <Github size={14} className="text-slate-400 dark:text-slate-550" /> GitHub Repository Statistics
+              </p>
+
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-4 text-xs text-slate-550 dark:text-slate-400">
+                <span className="font-semibold text-[#334155] dark:text-slate-355">
+                  {githubDataForRepo?.name || project.repoName}
+                </span>
+                <span className="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-650" />
+                <span className="text-[9px] uppercase tracking-wider bg-slate-105 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-1.5 py-0.5 rounded font-bold text-slate-550 dark:text-slate-400">
+                  {githubDataForRepo?.visibility || 'public'}
+                </span>
+                {githubDataForRepo?.language && (
+                  <>
+                    <span className="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-650" />
+                    <span className="flex items-center gap-1 font-medium text-slate-650 dark:text-slate-450">
+                      <span
+                        className="w-2 h-2 rounded-full"
+                        style={{ backgroundColor: getLanguageColor(githubDataForRepo.language) }}
+                      />
+                      {githubDataForRepo.language}
+                    </span>
+                  </>
+                )}
+              </div>
+
+              {loading ? (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {Array.from({ length: 4 }).map((_, idx) => (
+                    <div key={idx} className="animate-pulse h-[72px] bg-slate-800/30 rounded-xl" />
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+                  <motion.div 
+                    whileHover={{ scale: 1.03 }}
+                    className={`flex-1 h-[72px] flex flex-col items-center justify-center rounded-[16px] border shadow-sm transition-all duration-300 ${
+                      isLight 
+                        ? 'border-[#e2e8f0] bg-white hover:border-[#3b82f6]/30 hover:shadow-md' 
+                        : 'border-white/10 bg-white/[0.03] hover:border-[#38bdf8]/30'
+                    }`}
+                  >
+                    <p className="text-slate-400 dark:text-slate-550 uppercase tracking-widest text-[9px] font-bold mb-0.5">Stars</p>
+                    <p className={`font-display font-extrabold text-lg transition-colors duration-300 ${isLight ? 'text-slate-800' : 'text-slate-200'}`}>
+                      {githubDataForRepo?.stars !== undefined ? githubDataForRepo.stars : 0}
+                    </p>
+                  </motion.div>
+                  <motion.div 
+                    whileHover={{ scale: 1.03 }}
+                    className={`flex-1 h-[72px] flex flex-col items-center justify-center rounded-[16px] border shadow-sm transition-all duration-300 ${
+                      isLight 
+                        ? 'border-[#e2e8f0] bg-white hover:border-[#3b82f6]/30 hover:shadow-md' 
+                        : 'border-white/10 bg-white/[0.03] hover:border-[#38bdf8]/30'
+                    }`}
+                  >
+                    <p className="text-slate-400 dark:text-slate-550 uppercase tracking-widest text-[9px] font-bold mb-0.5">Forks</p>
+                    <p className={`font-display font-extrabold text-lg transition-colors duration-300 ${isLight ? 'text-slate-800' : 'text-slate-200'}`}>
+                      {githubDataForRepo?.forks !== undefined ? githubDataForRepo.forks : 0}
+                    </p>
+                  </motion.div>
+                  <motion.div 
+                    whileHover={{ scale: 1.03 }}
+                    className={`flex-1 h-[72px] flex flex-col items-center justify-center rounded-[16px] border shadow-sm transition-all duration-300 ${
+                      isLight 
+                        ? 'border-[#e2e8f0] bg-white hover:border-[#3b82f6]/30 hover:shadow-md' 
+                        : 'border-white/10 bg-white/[0.03] hover:border-[#38bdf8]/30'
+                    }`}
+                  >
+                    <p className="text-slate-400 dark:text-slate-550 uppercase tracking-widest text-[9px] font-bold mb-0.5">Open Issues</p>
+                    <p className={`font-display font-extrabold text-lg transition-colors duration-300 ${isLight ? 'text-slate-800' : 'text-slate-200'}`}>
+                      {githubDataForRepo?.openIssues !== undefined ? githubDataForRepo.openIssues : 0}
+                    </p>
+                  </motion.div>
+                  <motion.div 
+                    whileHover={{ scale: 1.03 }}
+                    className={`flex-1 h-[72px] flex flex-col items-center justify-center rounded-[16px] border shadow-sm transition-all duration-300 ${
+                      isLight 
+                        ? 'border-[#e2e8f0] bg-white hover:border-[#3b82f6]/30 hover:shadow-md' 
+                        : 'border-white/10 bg-white/[0.03] hover:border-[#38bdf8]/30'
+                    }`}
+                  >
+                    <p className="text-slate-400 dark:text-slate-550 uppercase tracking-widest text-[9px] font-bold mb-0.5">License</p>
+                    <p className={`font-display font-extrabold text-sm truncate w-full px-1 text-center transition-colors duration-300 ${isLight ? 'text-slate-800' : 'text-slate-200'}`} title={githubDataForRepo?.license || 'None'}>
+                      {githubDataForRepo?.license || 'None'}
+                    </p>
+                  </motion.div>
+                </div>
+              )}
+
+              {!loading && githubDataForRepo?.lastUpdated && (
+                <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-3.5 text-right italic font-medium">
+                  Last synchronized: {new Date(githubDataForRepo.lastUpdated).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                  })}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Buttons container */}
+          <div className="flex flex-wrap gap-3.5 mt-8">
+            {project.id === 'laura-finance-tracker' && (
+              <>
+                {homepageUrl && (
+                  <motion.a
+                    href={homepageUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.02, y: -3 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
+                      isLight 
+                        ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
+                        : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
+                    }`}
+                  >
+                    <ExternalLink size={16} />
+                    Live Demo
+                  </motion.a>
+                )}
+                <motion.a
+                  href={repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.02, y: -3 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
+                    isLight 
+                      ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
+                      : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
+                  }`}
+                >
+                  <Github size={16} />
+                  View Repository
+                </motion.a>
+                <motion.a
+                  href={`${repoUrl}#readme`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.02, y: -3 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 border ${
+                    isLight 
+                      ? 'border-[#dbeafe] bg-white text-[#334155] shadow-sm hover:border-[#3b82f6] hover:bg-[#f0f9ff] hover:shadow-md' 
+                      : 'border-white/10 bg-white/[0.03] text-white hover:bg-white/[0.06] hover:border-[#38bdf8]'
+                  }`}
+                >
+                  <BookOpen size={16} />
+                  Read Documentation
+                </motion.a>
+              </>
+            )}
+
+            {project.id === 'my-portfolio-website' && (
+              <>
+                {homepageUrl && (
+                  <motion.a
+                    href={homepageUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.02, y: -3 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
+                      isLight 
+                        ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
+                        : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
+                    }`}
+                  >
+                    <ExternalLink size={16} />
+                    Live Website
+                  </motion.a>
+                )}
+                <motion.a
+                  href={repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.02, y: -3 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
+                    isLight 
+                      ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
+                      : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
+                  }`}
+                >
+                  <Github size={16} />
+                  View Repository
+                </motion.a>
+                <motion.a
+                  href={`${repoUrl}#readme`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.02, y: -3 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 border ${
+                    isLight 
+                      ? 'border-[#dbeafe] bg-white text-[#334155] shadow-sm hover:border-[#3b82f6] hover:bg-[#f0f9ff] hover:shadow-md' 
+                      : 'border-white/10 bg-white/[0.03] text-white hover:bg-white/[0.06] hover:border-[#38bdf8]'
+                  }`}
+                >
+                  <BookOpen size={16} />
+                  Source Code
+                </motion.a>
+              </>
+            )}
+
+            {project.id === 'my-first-website' && (
+              <>
+                {homepageUrl && (
+                  <motion.a
+                    href={homepageUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.02, y: -3 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
+                      isLight 
+                        ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
+                        : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
+                    }`}
+                  >
+                    <ExternalLink size={16} />
+                    Live Website
+                  </motion.a>
+                )}
+                <motion.a
+                  href={repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.02, y: -3 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
+                    isLight 
+                      ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
+                      : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
+                  }`}
+                >
+                  <Github size={16} />
+                  View Repository
+                </motion.a>
+              </>
+            )}
+          </div>
+        </div>
+
+      </div>
+    </motion.div>
+  )
+})
+
 export default function Projects() {
   const [githubData, setGithubData] = useState({})
   const [loading, setLoading] = useState(true)
@@ -289,8 +645,6 @@ export default function Projects() {
     }
   }, [])
 
-  const isLight = theme === 'light'
-
   return (
     <section id="projects" className="relative py-28 px-6 max-w-6xl mx-auto">
       <SectionHeading
@@ -300,361 +654,16 @@ export default function Projects() {
       />
 
       <div className="mt-14 flex flex-col gap-10 w-full">
-        {projects.map((project, i) => {
-          const repoUrl = githubData[project.repoName]?.html_url || project.github || `https://github.com/keerthivasanB2007/${project.repoName}`
-          const homepageUrl = githubData[project.repoName]?.homepage || project.demo
-
-          return (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.7, delay: i * 0.15 }}
-              whileHover={{
-                y: -6,
-                scale: 1.005,
-                boxShadow: isLight
-                  ? '0 20px 50px rgba(15, 23, 42, 0.15)'
-                  : '0 0 50px -10px rgba(56, 189, 248, 0.45)'
-              }}
-              className={`rounded-[24px] p-6 sm:p-10 lg:p-12 overflow-hidden transition-all duration-300 relative group w-full border ${
-                isLight 
-                  ? 'bg-white border-[rgba(148,163,184,0.18)] shadow-[0_12px_40px_rgba(15,23,42,0.08)]' 
-                  : 'glass border-white/10 shadow-2xl'
-              }`}
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1.8fr] gap-8 items-stretch">
-
-                {/* Left Column: Preview Panel */}
-                <ProjectGallery
-                  project={project}
-                  theme={theme}
-                  fallbackBanner={
-                    <ProjectBanner
-                      repoName={project.repoName}
-                      title={project.title}
-                      stack={project.stack}
-                      category={project.category}
-                      theme={theme}
-                    />
-                  }
-                />
-
-                {/* Right Column: Details */}
-                <div className="flex flex-col justify-between">
-                  <div>
-                    <h3 className={`font-display font-bold text-[28px] md:text-[32px] lg:text-[36px] tracking-tight transition-colors duration-300 ${
-                      isLight 
-                        ? 'bg-gradient-to-r from-[#38bdf8] to-[#0ea5e9] bg-clip-text text-transparent' 
-                        : 'text-slate-100 group-hover:text-[#38bdf8]'
-                    }`}>
-                      {project.title}
-                    </h3>
-                    <p className={`text-[17px] leading-[1.8] max-w-[620px] mt-4 mb-6 transition-colors duration-300 ${
-                      isLight ? 'text-[#64748b]' : 'text-slate-350'
-                    }`}>
-                      {project.description}
-                    </p>
-
-                    {/* Features List */}
-                    <div className="mt-6">
-                      <p className={`text-[12px] font-bold uppercase tracking-[0.12em] mb-[14px] flex items-center gap-1.5 transition-colors duration-300 ${
-                        isLight ? 'text-[#334155]' : 'text-slate-400'
-                      }`}>
-                        Key Features
-                      </p>
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3.5 text-[16px] leading-[1.8] text-slate-500 dark:text-slate-450 mt-4">
-                        {project.features.map((feature) => (
-                          <li key={feature} className="flex items-start gap-2.5">
-                            <span className="text-[#3b82f6] dark:text-[#38bdf8] font-bold mt-0.5">✓</span>
-                            <span>{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Tech Stack Chips */}
-                    <div className="mt-6">
-                      <p className={`text-[12px] font-bold uppercase tracking-[0.12em] mb-[14px] transition-colors duration-300 ${
-                        isLight ? 'text-[#334155]' : 'text-slate-400'
-                      }`}>
-                        Technologies Used
-                      </p>
-                      <div className="flex flex-wrap gap-2.5 mt-4">
-                        {project.stack.map((tech) => (
-                          <motion.span
-                            key={tech}
-                            whileHover={{ scale: 1.03, y: -2 }}
-                            className={`h-[34px] px-3.5 inline-flex items-center gap-2 rounded-full border text-[13px] font-semibold shadow-sm transition-all duration-250 ${
-                              isLight 
-                                ? 'border-[#e2e8f0] bg-[#f8fafc] text-[#334155] hover:bg-white hover:border-[#3b82f6] hover:shadow-blue-500/5' 
-                                : 'border-white/10 bg-white/[0.03] text-slate-200 hover:bg-white/[0.06] hover:border-[#38bdf8]'
-                            }`}
-                          >
-                            <TechLogo tech={tech} />
-                            {tech}
-                          </motion.span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* GitHub Stats */}
-                    <div className="mt-6">
-                      <div className="h-[1px] w-full bg-[rgba(226,232,240,0.8)] dark:bg-white/10 my-8" />
-                      
-                      <p className={`text-[12px] font-bold uppercase tracking-[0.12em] mb-[14px] flex items-center gap-1.5 transition-colors duration-300 ${
-                        isLight ? 'text-[#334155]' : 'text-slate-400'
-                      }`}>
-                        <Github size={14} className="text-slate-400 dark:text-slate-550" /> GitHub Repository Statistics
-                      </p>
-
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-4 text-xs text-slate-550 dark:text-slate-400">
-                        <span className="font-semibold text-[#334155] dark:text-slate-355">
-                          {githubData[project.repoName]?.name || project.repoName}
-                        </span>
-                        <span className="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-650" />
-                        <span className="text-[9px] uppercase tracking-wider bg-slate-105 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-1.5 py-0.5 rounded font-bold text-slate-550 dark:text-slate-400">
-                          {githubData[project.repoName]?.visibility || 'public'}
-                        </span>
-                        {githubData[project.repoName]?.language && (
-                          <>
-                            <span className="w-1 h-1 rounded-full bg-slate-400 dark:bg-slate-650" />
-                            <span className="flex items-center gap-1 font-medium text-slate-650 dark:text-slate-450">
-                              <span
-                                className="w-2 h-2 rounded-full"
-                                style={{ backgroundColor: getLanguageColor(githubData[project.repoName].language) }}
-                              />
-                              {githubData[project.repoName].language}
-                            </span>
-                          </>
-                        )}
-                      </div>
-
-                      {loading ? (
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                          {Array.from({ length: 4 }).map((_, idx) => (
-                            <div key={idx} className="animate-pulse h-[72px] bg-slate-800/30 rounded-xl" />
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-                          <motion.div 
-                            whileHover={{ scale: 1.03 }}
-                            className={`flex-1 h-[72px] flex flex-col items-center justify-center rounded-[16px] border shadow-sm transition-all duration-300 ${
-                              isLight 
-                                ? 'border-[#e2e8f0] bg-white hover:border-[#3b82f6]/30 hover:shadow-md' 
-                                : 'border-white/10 bg-white/[0.03] hover:border-[#38bdf8]/30'
-                            }`}
-                          >
-                            <p className="text-slate-400 dark:text-slate-550 uppercase tracking-widest text-[9px] font-bold mb-0.5">Stars</p>
-                            <p className={`font-display font-extrabold text-lg transition-colors duration-300 ${isLight ? 'text-slate-800' : 'text-slate-200'}`}>
-                              {githubData[project.repoName]?.stars !== undefined ? githubData[project.repoName].stars : 0}
-                            </p>
-                          </motion.div>
-                          <motion.div 
-                            whileHover={{ scale: 1.03 }}
-                            className={`flex-1 h-[72px] flex flex-col items-center justify-center rounded-[16px] border shadow-sm transition-all duration-300 ${
-                              isLight 
-                                ? 'border-[#e2e8f0] bg-white hover:border-[#3b82f6]/30 hover:shadow-md' 
-                                : 'border-white/10 bg-white/[0.03] hover:border-[#38bdf8]/30'
-                            }`}
-                          >
-                            <p className="text-slate-400 dark:text-slate-550 uppercase tracking-widest text-[9px] font-bold mb-0.5">Forks</p>
-                            <p className={`font-display font-extrabold text-lg transition-colors duration-300 ${isLight ? 'text-slate-800' : 'text-slate-200'}`}>
-                              {githubData[project.repoName]?.forks !== undefined ? githubData[project.repoName].forks : 0}
-                            </p>
-                          </motion.div>
-                          <motion.div 
-                            whileHover={{ scale: 1.03 }}
-                            className={`flex-1 h-[72px] flex flex-col items-center justify-center rounded-[16px] border shadow-sm transition-all duration-300 ${
-                              isLight 
-                                ? 'border-[#e2e8f0] bg-white hover:border-[#3b82f6]/30 hover:shadow-md' 
-                                : 'border-white/10 bg-white/[0.03] hover:border-[#38bdf8]/30'
-                            }`}
-                          >
-                            <p className="text-slate-400 dark:text-slate-550 uppercase tracking-widest text-[9px] font-bold mb-0.5">Open Issues</p>
-                            <p className={`font-display font-extrabold text-lg transition-colors duration-300 ${isLight ? 'text-slate-800' : 'text-slate-200'}`}>
-                              {githubData[project.repoName]?.openIssues !== undefined ? githubData[project.repoName].openIssues : 0}
-                            </p>
-                          </motion.div>
-                          <motion.div 
-                            whileHover={{ scale: 1.03 }}
-                            className={`flex-1 h-[72px] flex flex-col items-center justify-center rounded-[16px] border shadow-sm transition-all duration-300 ${
-                              isLight 
-                                ? 'border-[#e2e8f0] bg-white hover:border-[#3b82f6]/30 hover:shadow-md' 
-                                : 'border-white/10 bg-white/[0.03] hover:border-[#38bdf8]/30'
-                            }`}
-                          >
-                            <p className="text-slate-400 dark:text-slate-550 uppercase tracking-widest text-[9px] font-bold mb-0.5">License</p>
-                            <p className={`font-display font-extrabold text-sm truncate w-full px-1 text-center transition-colors duration-300 ${isLight ? 'text-slate-800' : 'text-slate-200'}`} title={githubData[project.repoName]?.license || 'None'}>
-                              {githubData[project.repoName]?.license || 'None'}
-                            </p>
-                          </motion.div>
-                        </div>
-                      )}
-
-                      {!loading && githubData[project.repoName]?.lastUpdated && (
-                        <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-3.5 text-right italic font-medium">
-                          Last synchronized: {new Date(githubData[project.repoName].lastUpdated).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric'
-                          })}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Buttons container */}
-                  <div className="flex flex-wrap gap-3.5 mt-8">
-                    {project.id === 'laura-finance-tracker' && (
-                      <>
-                        {homepageUrl && (
-                          <motion.a
-                            href={homepageUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            whileHover={{ scale: 1.02, y: -3 }}
-                            whileTap={{ scale: 0.98 }}
-                            className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
-                              isLight 
-                                ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
-                                : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
-                            }`}
-                          >
-                            <ExternalLink size={16} />
-                            Live Demo
-                          </motion.a>
-                        )}
-                        <motion.a
-                          href={repoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          whileHover={{ scale: 1.02, y: -3 }}
-                          whileTap={{ scale: 0.98 }}
-                          className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
-                            isLight 
-                              ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
-                              : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
-                          }`}
-                        >
-                          <Github size={16} />
-                          View Repository
-                        </motion.a>
-                        <motion.a
-                          href={`${repoUrl}#readme`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          whileHover={{ scale: 1.02, y: -3 }}
-                          whileTap={{ scale: 0.98 }}
-                          className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 border ${
-                            isLight 
-                              ? 'border-[#dbeafe] bg-white text-[#334155] shadow-sm hover:border-[#3b82f6] hover:bg-[#f0f9ff] hover:shadow-md' 
-                              : 'border-white/10 bg-white/[0.03] text-white hover:bg-white/[0.06] hover:border-[#38bdf8]'
-                          }`}
-                        >
-                          <BookOpen size={16} />
-                          Read Documentation
-                        </motion.a>
-                      </>
-                    )}
-
-                    {project.id === 'my-portfolio-website' && (
-                      <>
-                        {homepageUrl && (
-                          <motion.a
-                            href={homepageUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            whileHover={{ scale: 1.02, y: -3 }}
-                            whileTap={{ scale: 0.98 }}
-                            className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
-                              isLight 
-                                ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
-                                : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
-                            }`}
-                          >
-                            <ExternalLink size={16} />
-                            Live Website
-                          </motion.a>
-                        )}
-                        <motion.a
-                          href={repoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          whileHover={{ scale: 1.02, y: -3 }}
-                          whileTap={{ scale: 0.98 }}
-                          className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
-                            isLight 
-                              ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
-                              : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
-                          }`}
-                        >
-                          <Github size={16} />
-                          View Repository
-                        </motion.a>
-                        <motion.a
-                          href={`${repoUrl}#readme`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          whileHover={{ scale: 1.02, y: -3 }}
-                          whileTap={{ scale: 0.98 }}
-                          className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 border ${
-                            isLight 
-                              ? 'border-[#dbeafe] bg-white text-[#334155] shadow-sm hover:border-[#3b82f6] hover:bg-[#f0f9ff] hover:shadow-md' 
-                              : 'border-white/10 bg-white/[0.03] text-white hover:bg-white/[0.06] hover:border-[#38bdf8]'
-                          }`}
-                        >
-                          <BookOpen size={16} />
-                          Source Code
-                        </motion.a>
-                      </>
-                    )}
-
-                    {project.id === 'my-first-website' && (
-                      <>
-                        {homepageUrl && (
-                          <motion.a
-                            href={homepageUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            whileHover={{ scale: 1.02, y: -3 }}
-                            whileTap={{ scale: 0.98 }}
-                            className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
-                              isLight 
-                                ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
-                                : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
-                            }`}
-                          >
-                            <ExternalLink size={16} />
-                            Live Website
-                          </motion.a>
-                        )}
-                        <motion.a
-                          href={repoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          whileHover={{ scale: 1.02, y: -3 }}
-                          whileTap={{ scale: 0.98 }}
-                          className={`h-[46px] px-[22px] inline-flex items-center justify-center gap-2 rounded-[14px] text-sm font-semibold transition-all duration-300 ${
-                            isLight 
-                              ? 'bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white shadow-[0_10px_24px_rgba(59,130,246,0.25)] hover:brightness-110' 
-                              : 'bg-gradient-to-r from-primary to-accent text-white dark:text-slate-950 hover:shadow-glow'
-                          }`}
-                        >
-                          <Github size={16} />
-                          View Repository
-                        </motion.a>
-                      </>
-                    )}
-                  </div>
-                </div>
-
-              </div>
-            </motion.div>
-          )
-        })}
+        {projects.map((project, i) => (
+          <ProjectCard
+            key={project.id}
+            project={project}
+            index={i}
+            githubDataForRepo={githubData[project.repoName]}
+            loading={loading}
+            theme={theme}
+          />
+        ))}
       </div>
     </section>
   )

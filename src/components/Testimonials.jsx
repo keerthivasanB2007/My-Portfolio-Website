@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { principles } from '../data/principles'
 import SectionHeading from './SectionHeading'
 
-export default function Testimonials() {
+function Testimonials() {
   const [theme, setTheme] = useState(
     () => typeof document !== 'undefined' ? (document.documentElement.dataset.theme || 'dark') : 'dark'
   )
@@ -143,3 +143,5 @@ export default function Testimonials() {
     </section>
   )
 }
+
+export default memo(Testimonials)

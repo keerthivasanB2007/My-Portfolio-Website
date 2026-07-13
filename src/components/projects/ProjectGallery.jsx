@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
 import PhoneGallery from './PhoneGallery'
 import BrowserGallery from './BrowserGallery'
 
@@ -6,12 +7,16 @@ export default function ProjectGallery({ project, theme, fallbackBanner }) {
   const isLight = theme === 'light'
   const hasScreenshots = project.screenshots && project.screenshots.length > 0
 
+  const ref = useRef(null)
+  const isInView = useInView(ref, { margin: '150px' })
+
   return (
     <motion.div
+      ref={ref}
       // Subtle float animation
-      animate={{
+      animate={isInView ? {
         y: [0, -6, 0],
-      }}
+      } : { y: 0 }}
       transition={{
         duration: 6,
         repeat: Infinity,

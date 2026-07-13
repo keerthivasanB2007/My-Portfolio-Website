@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Html, OrbitControls, Line } from '@react-three/drei'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -163,8 +163,26 @@ export default function SkillsGalaxy() {
   const [hovered, setHovered] = useState(null)
   const hoveredSkill = skills.find((s) => s.id === hovered)
 
+  const containerRef = useRef(null)
+  const [isInView, setIsInView] = useState(false)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting)
+      },
+      { rootMargin: '200px', threshold: 0 }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <section id="skills" className="relative py-28 px-6 max-w-6xl mx-auto">
+    <section ref={containerRef} id="skills" className="relative py-28 px-6 max-w-6xl mx-auto">
       <SectionHeading
         eyebrow="Skills Galaxy"
         title="Every skill, a glowing planet"
@@ -173,9 +191,13 @@ export default function SkillsGalaxy() {
       />
 
       <div className="relative mt-14 h-[520px] rounded-3xl glass overflow-hidden">
-        <Canvas camera={{ position: [0, 2, 8], fov: 50 }} dpr={[1, 1.5]}>
-          <Scene positions={positions} labels={labels} hovered={hovered} setHovered={setHovered} />
-        </Canvas>
+        {isInView ? (
+          <Canvas camera={{ position: [0, 2, 8], fov: 50 }} dpr={[1, 1.5]}>
+            <Scene positions={positions} labels={labels} hovered={hovered} setHovered={setHovered} />
+          </Canvas>
+        ) : (
+          <div className="w-full h-full bg-void" />
+        )}
 
         <AnimatePresence>
           {hoveredSkill && (

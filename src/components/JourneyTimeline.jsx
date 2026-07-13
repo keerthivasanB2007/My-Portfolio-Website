@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, memo } from 'react'
 import { Award, BookOpen, Brain, Code, Database, GraduationCap, Laptop, Rocket, School } from 'lucide-react'
 import { motion, useScroll } from 'framer-motion'
 import { journey } from '../data/timeline'
@@ -22,7 +22,7 @@ const iconMap = {
   School,
 }
 
-export default function JourneyTimeline() {
+function JourneyTimeline() {
   const timelineRef = useRef(null)
   const { scrollYProgress } = useScroll({
     target: timelineRef,
@@ -137,3 +137,5 @@ export default function JourneyTimeline() {
     </section>
   )
 }
+
+export default memo(JourneyTimeline)

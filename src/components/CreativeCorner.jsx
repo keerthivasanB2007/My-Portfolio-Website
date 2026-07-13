@@ -146,16 +146,35 @@ export default function CreativeCorner() {
 
   // Columns Count resize observer
   useEffect(() => {
+    let timeoutId
     const handleResize = () => {
-      const w = window.innerWidth
-      if (w < 640) setColumnsCount(1)
-      else if (w < 768) setColumnsCount(2)
-      else if (w < 1024) setColumnsCount(3)
-      else setColumnsCount(4)
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
+        const w = window.innerWidth
+        let newCount = 4
+        if (w < 640) newCount = 1
+        else if (w < 768) newCount = 2
+        else if (w < 1024) newCount = 3
+
+        setColumnsCount((prev) => {
+          if (prev !== newCount) return newCount
+          return prev
+        })
+      }, 150)
     }
-    handleResize()
+    
+    // Initial layout
+    const w = window.innerWidth
+    if (w < 640) setColumnsCount(1)
+    else if (w < 768) setColumnsCount(2)
+    else if (w < 1024) setColumnsCount(3)
+    else setColumnsCount(4)
+
     window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      clearTimeout(timeoutId)
+    }
   }, [])
 
   const isLight = theme === 'light'

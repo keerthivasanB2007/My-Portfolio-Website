@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { GraduationCap } from 'lucide-react'
 import SectionHeading from './SectionHeading'
@@ -13,7 +14,7 @@ const storyParagraphs = [
   'My journey continues at Madras Institute of Technology, MIT Campus, Chennai, one of the constituent campuses of Anna University, where I am pursuing my Bachelor of Engineering in Computer Science and Engineering. Being in an environment with a strong engineering culture has helped me stay grounded while deepening my interest in backend systems, software design, and the fundamentals that make technology work well.',
 ]
 
-export default function About() {
+function About() {
   return (
     <section id="about" className="relative py-28 px-6 max-w-6xl mx-auto">
       <SectionHeading eyebrow="The Story" title="How curiosity became a craft" />
@@ -145,3 +146,5 @@ export default function About() {
     </section>
   )
 }
+
+export default memo(About)

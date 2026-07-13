@@ -1,6 +1,7 @@
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 
-export default function SectionHeading({ eyebrow, title, subtitle, center = false }) {
+function SectionHeading({ eyebrow, title, subtitle, center = false }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -17,3 +18,5 @@ export default function SectionHeading({ eyebrow, title, subtitle, center = fals
     </motion.div>
   )
 }
+
+export default memo(SectionHeading)

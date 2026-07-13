@@ -417,7 +417,7 @@ function ErrorBanner({ message }) {
   )
 }
 
-export default function GithubStats() {
+function GithubStats() {
   const { profile, repos, loading, error } = useGitHub(GITHUB_USERNAME)
   const theme = usePortfolioTheme()
   const embedUrls = useMemo(() => getEmbedUrls(theme), [theme])
@@ -549,3 +549,5 @@ export default function GithubStats() {
     </section>
   )
 }
+
+export default memo(GithubStats)

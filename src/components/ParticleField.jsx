@@ -45,6 +45,8 @@ function Particles({ count = 1400 }) {
 
 export default function ParticleField() {
   const [particleCount, setParticleCount] = useState(1400)
+  const containerRef = useRef(null)
+  const [isInView, setIsInView] = useState(true)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -52,11 +54,28 @@ export default function ParticleField() {
     setParticleCount(isMobile ? 600 : 1400)
   }, [])
 
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting)
+      },
+      { threshold: 0 }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <div className="absolute inset-0 -z-10" aria-hidden="true">
-      <Canvas camera={{ position: [0, 0, 5], fov: 55 }} dpr={[1, 1.5]}>
-        <Particles count={particleCount} />
-      </Canvas>
+    <div ref={containerRef} className="absolute inset-0 -z-10" aria-hidden="true">
+      {isInView && (
+        <Canvas camera={{ position: [0, 0, 5], fov: 55 }} dpr={[1, 1.5]}>
+          <Particles count={particleCount} />
+        </Canvas>
+      )}
     </div>
   )
 }

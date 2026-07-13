@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
 
 export default function BrowserGallery({ screenshots, theme }) {
   const isLight = theme === 'light'
@@ -7,6 +7,9 @@ export default function BrowserGallery({ screenshots, theme }) {
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
+
+  const containerRef = useRef(null)
+  const isInView = useInView(containerRef, { margin: '100px' })
 
   const handleNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % images.length)
@@ -18,10 +21,10 @@ export default function BrowserGallery({ screenshots, theme }) {
 
   // Autoplay functionality
   useEffect(() => {
-    if (isHovered || images.length <= 1) return
+    if (!isInView || isHovered || images.length <= 1) return
     const interval = setInterval(handleNext, 3000)
     return () => clearInterval(interval)
-  }, [isHovered, handleNext, images.length])
+  }, [isInView, isHovered, handleNext, images.length])
 
   // Keyboard navigation when focused
   const handleKeyDown = (e) => {
@@ -38,6 +41,7 @@ export default function BrowserGallery({ screenshots, theme }) {
 
   return (
     <div
+      ref={containerRef}
       tabIndex={0}
       onKeyDown={handleKeyDown}
       onMouseEnter={() => setIsHovered(true)}

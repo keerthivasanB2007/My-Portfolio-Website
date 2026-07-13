@@ -34,7 +34,6 @@ function useTypingEffect(words, typeSpeed = 70, deleteSpeed = 40, pause = 1400) 
 }
 
 export default function Hero() {
-  const typed = useTypingEffect(ROLES)
   const heroRef = useRef(null)
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
@@ -107,10 +106,7 @@ export default function Hero() {
             </p>
           </motion.div>
 
-          <div className="mt-6 h-9 flex items-center justify-center lg:justify-start font-display text-xl sm:text-2xl text-primary">
-            <span>{typed}</span>
-            <span className="ml-1 w-[2px] h-6 bg-primary animate-pulse" />
-          </div>
+          <TypingSubtitle words={ROLES} />
 
           <p className="mt-6 text-slate-400 max-w-xl mx-auto lg:mx-0">
             I don't just write code — I build systems with intention and craft interfaces with care.
@@ -180,17 +176,36 @@ export default function Hero() {
   )
 }
 
+function TypingSubtitle({ words }) {
+  const typed = useTypingEffect(words)
+  return (
+    <div className="mt-6 h-9 flex items-center justify-center lg:justify-start font-display text-xl sm:text-2xl text-primary">
+      <span>{typed}</span>
+      <span className="ml-1 w-[2px] h-6 bg-primary animate-pulse" />
+    </div>
+  )
+}
+
 function MagneticButton({ children, onClick, href, download, primary, ...props }) {
   const ref = useRef(null)
-  const [pos, setPos] = useState({ x: 0, y: 0 })
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+
+  const springX = useSpring(x, { stiffness: 150, damping: 15 })
+  const springY = useSpring(y, { stiffness: 150, damping: 15 })
 
   const handleMove = (e) => {
+    if (!ref.current) return
     const rect = ref.current.getBoundingClientRect()
-    const x = (e.clientX - rect.left - rect.width / 2) * 0.3
-    const y = (e.clientY - rect.top - rect.height / 2) * 0.3
-    setPos({ x, y })
+    const targetX = (e.clientX - rect.left - rect.width / 2) * 0.3
+    const targetY = (e.clientY - rect.top - rect.height / 2) * 0.3
+    x.set(targetX)
+    y.set(targetY)
   }
-  const reset = () => setPos({ x: 0, y: 0 })
+  const reset = () => {
+    x.set(0)
+    y.set(0)
+  }
 
   const classes = primary
     ? 'hero-primary-btn bg-gradient-to-r from-primary to-accent text-slate-950 shadow-glow'
@@ -208,8 +223,7 @@ function MagneticButton({ children, onClick, href, download, primary, ...props }
       ref={ref}
       onMouseMove={handleMove}
       onMouseLeave={reset}
-      animate={{ x: pos.x, y: pos.y }}
-      transition={{ type: 'spring', stiffness: 150, damping: 15 }}
+      style={{ x: springX, y: springY }}
       className="inline-block"
     >
       <Component

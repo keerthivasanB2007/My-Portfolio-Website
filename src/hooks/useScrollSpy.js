@@ -31,7 +31,7 @@ export function useScrollSpy(ids) {
         if (el) observer.unobserve(el)
       })
     }
-  }, [ids])
+  }, [ids.join(',')])
 
   return active
 }

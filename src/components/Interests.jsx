@@ -1,8 +1,9 @@
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { interests } from '../data/content'
 import SectionHeading from './SectionHeading'
 
-export default function Interests() {
+function Interests() {
   return (
     <section id="interests" className="relative py-28 px-6 max-w-6xl mx-auto">
       <SectionHeading eyebrow="Outside the IDE" title="Interests" center />
@@ -26,3 +27,5 @@ export default function Interests() {
     </section>
   )
 }
+
+export default memo(Interests)

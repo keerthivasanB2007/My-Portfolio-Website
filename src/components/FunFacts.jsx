@@ -1,8 +1,9 @@
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { funFacts } from '../data/content'
 import SectionHeading from './SectionHeading'
 
-export default function FunFacts() {
+function FunFacts() {
   return (
     <section id="funfacts" className="relative py-28 px-6 max-w-6xl mx-auto">
       <SectionHeading eyebrow="Quick Hits" title="Fun Facts" center />
@@ -26,3 +27,5 @@ export default function FunFacts() {
     </section>
   )
 }
+
+export default memo(FunFacts)
