@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useState, lazy, Suspense, useRef } from 'react'
-import Lenis from '@studio-freight/lenis'
+// TEMPORARILY DISABLED FOR PERFORMANCE TEST
+// import Lenis from '@studio-freight/lenis'
 
 import Loader from './components/Loader'
 import Navbar from './components/Navbar'
@@ -67,24 +68,25 @@ export default function App() {
 
   // Smooth scroll, initialized once loading completes so it doesn't fight
   // with the loader's own transitions.
-  useEffect(() => {
-    if (loading) return
-    const lenis = new Lenis({
-      duration: 1.1,
-      easing: (t) => 1 - Math.pow(1 - t, 3),
-      smoothWheel: true,
-    })
-    let frame
-    function raf(time) {
-      lenis.raf(time)
-      frame = requestAnimationFrame(raf)
-    }
-    frame = requestAnimationFrame(raf)
-    return () => {
-      cancelAnimationFrame(frame)
-      lenis.destroy()
-    }
-  }, [loading])
+  // TEMPORARILY DISABLED FOR PERFORMANCE TEST
+  // useEffect(() => {
+  //   if (loading) return
+  //   const lenis = new Lenis({
+  //     duration: 1.1,
+  //     easing: (t) => 1 - Math.pow(1 - t, 3),
+  //     smoothWheel: true,
+  //   })
+  //   let frame
+  //   function raf(time) {
+  //     lenis.raf(time)
+  //     frame = requestAnimationFrame(raf)
+  //   }
+  //   frame = requestAnimationFrame(raf)
+  //   return () => {
+  //     cancelAnimationFrame(frame)
+  //     lenis.destroy()
+  //   }
+  // }, [loading])
 
   useLayoutEffect(() => {
     if (typeof document === 'undefined') return
