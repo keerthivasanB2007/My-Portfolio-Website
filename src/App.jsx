@@ -53,8 +53,12 @@ function DeferredSection({ children, id, height = '400px' }) {
   }, [])
 
   return (
-    <div id={isVisible ? undefined : id} ref={ref} style={{ minHeight: isVisible ? 'auto' : height }}>
-      {isVisible ? children : null}
+    <div id={id} ref={ref} style={{ minHeight: height }}>
+      {isVisible ? (
+        <Suspense fallback={<SectionLoader />}>
+          {children}
+        </Suspense>
+      ) : null}
     </div>
   )
 }
@@ -112,62 +116,58 @@ export default function App() {
           <main>
             <Hero />
             
-            <Suspense fallback={<SectionLoader />}>
-              <DeferredSection id="about" height="550px">
-                <About />
-              </DeferredSection>
+            <DeferredSection id="about" height="550px">
+              <About />
+            </DeferredSection>
 
-              <DeferredSection id="journey" height="900px">
-                <JourneyTimeline />
-              </DeferredSection>
+            <DeferredSection id="journey" height="900px">
+              <JourneyTimeline />
+            </DeferredSection>
 
-              <DeferredSection id="skills" height="750px">
-                <SkillsGalaxy />
-              </DeferredSection>
+            <DeferredSection id="skills" height="750px">
+              <SkillsGalaxy />
+            </DeferredSection>
 
-              <DeferredSection id="projects" height="1000px">
-                <Projects />
-              </DeferredSection>
+            <DeferredSection id="projects" height="1000px">
+              <Projects />
+            </DeferredSection>
 
-              <DeferredSection id="github" height="600px">
-                <GithubStats />
-              </DeferredSection>
+            <DeferredSection id="github" height="600px">
+              <GithubStats />
+            </DeferredSection>
 
-              <DeferredSection id="certifications" height="550px">
-                <Certifications />
-              </DeferredSection>
+            <DeferredSection id="certifications" height="550px">
+              <Certifications />
+            </DeferredSection>
 
-              <DeferredSection id="creative" height="800px">
-                <CreativeCorner />
-              </DeferredSection>
+            <DeferredSection id="creative" height="800px">
+              <CreativeCorner />
+            </DeferredSection>
 
-              <DeferredSection id="interests" height="500px">
-                <Interests />
-              </DeferredSection>
+            <DeferredSection id="interests" height="500px">
+              <Interests />
+            </DeferredSection>
 
-              <DeferredSection id="experience" height="350px">
-                <Experience />
-              </DeferredSection>
+            <DeferredSection id="experience" height="350px">
+              <Experience />
+            </DeferredSection>
 
-              <DeferredSection id="testimonials" height="450px">
-                <Testimonials />
-              </DeferredSection>
+            <DeferredSection id="testimonials" height="450px">
+              <Testimonials />
+            </DeferredSection>
 
-              <DeferredSection id="funfacts" height="350px">
-                <FunFacts />
-              </DeferredSection>
+            <DeferredSection id="funfacts" height="350px">
+              <FunFacts />
+            </DeferredSection>
 
-              <DeferredSection id="contact" height="700px">
-                <Contact />
-              </DeferredSection>
-            </Suspense>
+            <DeferredSection id="contact" height="700px">
+              <Contact />
+            </DeferredSection>
           </main>
           
-          <Suspense fallback={<SectionLoader />}>
-            <DeferredSection id="footer" height="200px">
-              <Footer />
-            </DeferredSection>
-          </Suspense>
+          <DeferredSection id="footer" height="200px">
+            <Footer />
+          </DeferredSection>
         </>
       )}
     </div>
